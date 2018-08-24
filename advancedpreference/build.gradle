@@ -1,0 +1,38 @@
+apply plugin: 'com.android.library'
+apply plugin: 'me.tatarka.retrolambda'
+android {
+    compileSdkVersion 26
+    buildToolsVersion "27.0.3"
+
+    defaultConfig {
+        minSdkVersion 11
+        targetSdkVersion 26
+        versionCode 1
+        versionName "0.01"
+
+        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+
+    }
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+    compileOptions{
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+}
+
+dependencies {
+    compile fileTree(dir: 'libs', include: ['*.jar'])
+    androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
+        exclude group: 'com.android.support', module: 'support-annotations'
+    })
+
+    compile group: 'io.reactivex.rxjava2', name: 'rxandroid', version: '2.0.2'
+    compile 'com.android.support:support-annotations:25.3.1'
+    testCompile group: 'org.mockito', name: 'mockito-core', version: '2.10.0'
+    testCompile 'junit:junit:4.12'
+}
