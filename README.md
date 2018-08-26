@@ -19,6 +19,6 @@ To use this library you have to make 2 steps:
     public ExamplePreferenceModel create(Context context){
         SharedPreferences sharedPreferences=PreferenceManager.getDefaultSharedPreferences(context);
         AdvancedPreferences advancedPreferences=new AdvancedPreferences(PreferenceConfig.getDefault(sharedPreferences));
-        return ExamplePreferenceModel preferenceModel=advancedPreferences.getPreferenceModel(ExamplePreferenceModel.class);
+        return advancedPreferences.getPreferenceModel(ExamplePreferenceModel.class);
     } 
 ```
