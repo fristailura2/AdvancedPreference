@@ -24,7 +24,7 @@ public class CollectionsConverter extends PreferenceConverter<Collection,Collect
                 throw new IllegalArgumentException("class to convert should be not a interface");
             Constructor<?>[] constructors=classToConvert.getConstructors();
             for (Constructor constructor:constructors) {
-                if(constructor.getParameterCount()==0) {
+                if(constructor.getTypeParameters().length==0) {
                     res = classToConvert.newInstance();
                     break;
                 }

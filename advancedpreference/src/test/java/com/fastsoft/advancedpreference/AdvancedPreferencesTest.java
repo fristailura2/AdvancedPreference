@@ -4,6 +4,7 @@ import android.content.SharedPreferences;
 
 import com.fastsoft.advancedpreference.anotations.PreferenceOperation;
 import com.fastsoft.advancedpreference.converters.SameTypeConverter;
+import com.fastsoft.advancedpreference.exceptions.IllegalMethodException;
 import com.fastsoft.advancedpreference.models.PreferenceModel;
 
 import org.junit.After;
@@ -53,7 +54,7 @@ public class AdvancedPreferencesTest {
     }
 
     @Test
-    public void getPreferenceModelTest(){
+    public void getPreferenceModelTest() throws IllegalMethodException {
         PreferenceModel preferenceModel= advancedPreferences.getPreferenceModel(TestablePreferenceModel.class);
         assertTrue(preferenceModel instanceof TestablePreferenceModel);
         assertTrue(Proxy.isProxyClass(preferenceModel.getClass()));
