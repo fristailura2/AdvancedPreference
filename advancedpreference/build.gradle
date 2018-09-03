@@ -4,11 +4,6 @@ apply plugin: 'me.tatarka.retrolambda'
 apply plugin: 'com.jfrog.bintray'
 apply plugin: 'com.github.dcendents.android-maven'
 
-
-
-
-
-
 ext {
     user = project.findProperty('bintray.user')
     key = project.findProperty('bintray.key')
@@ -25,7 +20,7 @@ ext {
     siteUrl = 'https://github.com/fristailura2/AdvancedPreference'
     gitUrl = 'https://github.com/fristailura2/AdvancedPreference.git'
 
-    libraryVersion = '0.0.2'
+    libraryVersion = '0.0.3'
 
     developerId = 'fristailura'
     developerName = 'Kyryrechko Yurii'
@@ -42,9 +37,9 @@ android {
     compileSdkVersion 27
     buildToolsVersion "27.0.3"
     defaultConfig {
-        minSdkVersion 11
+        minSdkVersion 14
         targetSdkVersion 27
-        versionCode 2
+        versionCode 3
         versionName project.getProperties().get(libraryVersion)
 
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
