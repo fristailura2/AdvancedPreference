@@ -1,15 +1,19 @@
 package com.fastsoft.advancedpreference.strateges;
 
+import android.support.annotation.NonNull;
+
 import com.fastsoft.advancedpreference.PreferenceHelper;
+import com.fastsoft.advancedpreference.ReflectionUtils;
 import com.fastsoft.advancedpreference.converters.PreferenceConverter;
 
+import java.lang.reflect.Type;
 import java.util.Set;
 
 /**
  * Created by ura on 18-Aug-18.
  */
 
-public abstract class BaseBindingStrategy<T> implements BindingStrategy<T> {
+public abstract class BaseBindingStrategy<T> implements BindingStrategy<T>,Comparable {
     private PreferenceHelper preferenceHelper;
     private Set<PreferenceConverter> preferenceConverters;
 
@@ -29,6 +33,28 @@ public abstract class BaseBindingStrategy<T> implements BindingStrategy<T> {
     }
     public Set<PreferenceConverter> getPreferenceConverters(){
         return preferenceConverters;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+       if(this.getClass().equals(o))
+           return true;
+       return false;
+    }
+
+    @Override
+    public int hashCode() {
+        Type[] params = ReflectionUtils.getParentGenericParams(this.getClass());
+        int res=0;
+        for (Type param:params) {
+            res+=param.hashCode();
+        }
+        return res;
+    }
+
+    @Override
+    public int compareTo(@NonNull Object o) {
+        return this.hashCode()-o.hashCode();
     }
 }
 

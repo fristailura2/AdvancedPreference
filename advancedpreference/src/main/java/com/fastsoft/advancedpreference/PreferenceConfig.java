@@ -32,10 +32,10 @@ public class PreferenceConfig {
         builder.preferenceConverters =provideDefaultBinders();
         builder.preferenceHelper =new PreferenceHelper(sharedPreferences);
         builder.sharedPreferences=sharedPreferences;
-        builder.bindingStrategies=provideDefaultStrategys(builder.sharedPreferences,builder.preferenceConverters,builder.preferenceHelper);
+        builder.bindingStrategies= provideDefaultStrategies(builder.sharedPreferences,builder.preferenceConverters,builder.preferenceHelper);
         return builder.build();
     }
-    private static Set<BindingStrategy> provideDefaultStrategys(SharedPreferences sharedPreferences, Set<PreferenceConverter> preferenceConverters, PreferenceHelper preferenceHelper){
+    private static Set<BindingStrategy> provideDefaultStrategies(SharedPreferences sharedPreferences, Set<PreferenceConverter> preferenceConverters, PreferenceHelper preferenceHelper){
         return new TreeSet<>(Arrays.asList(
                 new VoidStrategy(preferenceHelper, preferenceConverters),
                 new GeneralStrategy(preferenceHelper, preferenceConverters),
