@@ -7,6 +7,7 @@ import com.fastsoft.advancedpreference.PreferenceHelper;
 import com.fastsoft.advancedpreference.anotations.PreferenceOperation;
 import com.fastsoft.advancedpreference.converters.PreferenceConverter;
 import com.fastsoft.advancedpreference.exceptions.NoSuchConverterException;
+import com.fastsoft.advancedpreference.utils.Objects;
 
 import java.lang.reflect.Method;
 import java.util.Observable;
@@ -24,7 +25,9 @@ public class GeneralStrategy extends BaseBindingStrategy{
     }
 
     @Override
-    public Object bind(@NonNull  Method method,@Nullable Object arg,@NonNull PreferenceOperation methodPrefAnnotation) throws NoSuchConverterException {
+    public Object bindPrivate(Method method,Object arg,PreferenceOperation methodPrefAnnotation) throws NoSuchConverterException {
+        Objects.throwIfNotNullParam(arg,"arg");
+
         Object prefVal = getPreferenceHelper().get(methodPrefAnnotation.key());
         Set<PreferenceConverter> binders = getPreferenceConverters();
         for (PreferenceConverter binder:binders) {
@@ -37,6 +40,6 @@ public class GeneralStrategy extends BaseBindingStrategy{
 
     @Override
     public boolean canWorkWith(Class arg) {
-        return !(arg.equals(Completable.class)||arg.equals(Observable.class)||arg.equals(Void.class));
+        return !(arg.equals(Completable.class)||arg.equals(io.reactivex.Observable.class)||arg.equals(void.class));
     }
 }

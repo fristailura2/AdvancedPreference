@@ -1,4 +1,4 @@
-package com.fastsoft.advancedpreference.conventerstest;
+package com.fastsoft.advancedpreference.units.conventerstest;
 
 import com.fastsoft.advancedpreference.converters.NumberConverter;
 

@@ -1,11 +1,16 @@
-package com.fastsoft.advancedpreference;
+package com.fastsoft.advancedpreference.units;
 
 import android.content.SharedPreferences;
 
+import com.fastsoft.advancedpreference.AdvancedPreferences;
+import com.fastsoft.advancedpreference.PreferenceConfig;
+import com.fastsoft.advancedpreference.PreferenceHelper;
 import com.fastsoft.advancedpreference.anotations.PreferenceOperation;
+import com.fastsoft.advancedpreference.converters.PreferenceConverter;
 import com.fastsoft.advancedpreference.converters.SameTypeConverter;
 import com.fastsoft.advancedpreference.exceptions.IllegalMethodException;
 import com.fastsoft.advancedpreference.models.PreferenceModel;
+import com.fastsoft.advancedpreference.strateges.GeneralStrategy;
 
 import org.junit.After;
 import org.junit.Before;
@@ -18,6 +23,9 @@ import org.mockito.junit.MockitoJUnitRunner;
 import org.mockito.quality.Strictness;
 
 import java.lang.reflect.Proxy;
+import java.util.Arrays;
+import java.util.Set;
+import java.util.TreeSet;
 
 import io.reactivex.Completable;
 import io.reactivex.Observable;
@@ -36,13 +44,14 @@ public class AdvancedPreferencesTest {
     SharedPreferences sharedPreferencesMock;
     @Mock
     PreferenceHelper preferenceHelperMock;
-
+    Set<PreferenceConverter> converters= new TreeSet<>(Arrays.asList(new SameTypeConverter()));
     MockitoSession sesion;
     @Before
     public void init(){
         sesion = Mockito.mockitoSession().initMocks(this).strictness(Strictness.STRICT_STUBS).startMocking();
         config=new PreferenceConfig.Builder()
-                .replaceBinder(new SameTypeConverter())
+                .replaceConverters(converters)
+                .putStrategy(new GeneralStrategy(preferenceHelperMock,new TreeSet<>(converters)))
                 .setPreferences(sharedPreferencesMock)
                 .setPreferenceHelper(preferenceHelperMock)
                 .build();

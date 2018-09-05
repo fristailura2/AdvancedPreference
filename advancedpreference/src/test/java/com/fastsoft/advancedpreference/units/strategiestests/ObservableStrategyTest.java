@@ -1,8 +1,9 @@
-package com.fastsoft.advancedpreference.strategiestests;
+package com.fastsoft.advancedpreference.units.strategiestests;
 
 import com.fastsoft.advancedpreference.PreferenceHelper;
 import com.fastsoft.advancedpreference.anotations.PreferenceOperation;
 import com.fastsoft.advancedpreference.converters.PreferenceConverter;
+import com.fastsoft.advancedpreference.exceptions.NoSuchConverterException;
 import com.fastsoft.advancedpreference.models.PreferenceModel;
 import com.fastsoft.advancedpreference.strateges.ObservableStrategy;
 
@@ -66,7 +67,7 @@ public class ObservableStrategyTest {
     }
 
     @Test
-    public void bindTest() throws NoSuchMethodException {
+    public void bindTest() throws NoSuchMethodException, NoSuchConverterException {
         Method testMethod=TestablePreferenceModel.class.getMethod("getPreference");
         PreferenceOperation testAnnotation=testMethod.getAnnotation(PreferenceOperation.class);
 

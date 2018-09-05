@@ -37,7 +37,7 @@ public class PreferenceHelper {
             editor.putInt(key, (Integer) val);
         }else if(valClass.equals(Long.class)){
             editor.putLong(key, (Long) val);
-        }else if(valClass.equals(Set.class)){
+        }else if(Set.class.isAssignableFrom(val.getClass())){
             editor.putStringSet(key, (Set) val);
         }else if(valClass.equals(Boolean.class)){
             editor.putBoolean(key, (Boolean) val);
@@ -61,7 +61,7 @@ public class PreferenceHelper {
         return res;
     }
     public Observable<String> getPreferenceObservable(){
-        PreferenceOnSubscribe onSubscribe=new PreferenceOnSubscribe();
+        PreferenceOnSubscribe onSubscribe=new PreferenceOnSubscribe(sharedPreferences);
         return Observable.create(onSubscribe).doOnDispose(()->onSubscribe.close());
     }
     public Class<?> getPreferenceType(String key){
@@ -72,21 +72,17 @@ public class PreferenceHelper {
         private ObservableEmitter<String> emitter;
         private SharedPreferences.OnSharedPreferenceChangeListener listener;
 
-        public PreferenceOnSubscribe(SharedPreferences sharedPreferences) {
-            this.sharedPreferences = sharedPreferences;
-        }
 
-        public PreferenceOnSubscribe(){
-            listener= new SharedPreferences.OnSharedPreferenceChangeListener() {
-                @Override
-                public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
-                    if(emitter.isDisposed()){
-                        close();
-                    }else{
-                        emitter.onNext(key);
-                    }
 
+        public PreferenceOnSubscribe(SharedPreferences sharedPreferences1){
+            this.sharedPreferences = sharedPreferences1;
+            listener= (sharedPreferences, key) -> {
+                if(emitter.isDisposed()){
+                    close();
+                }else{
+                    emitter.onNext(key);
                 }
+
             };
         }
         @Override

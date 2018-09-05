@@ -5,6 +5,7 @@ import android.support.annotation.NonNull;
 import com.fastsoft.advancedpreference.ReflectionUtils;
 
 import java.lang.reflect.ParameterizedType;
+import java.lang.reflect.Type;
 
 /**
  * Created by ura on 11-Aug-18.
@@ -13,8 +14,18 @@ import java.lang.reflect.ParameterizedType;
 public abstract class PreferenceConverter<T extends Object,V extends Object> implements Comparable<PreferenceConverter>{
 
     @Override
-    public int compareTo(@NonNull PreferenceConverter other) {
-        return 0;
+    public int hashCode() {
+        Type[] params = ReflectionUtils.getParentGenericParams(this.getClass());
+        int res=0;
+        for (Type param:params) {
+            res+=param.hashCode();
+        }
+        return res;
+    }
+
+    @Override
+    public int compareTo(@NonNull PreferenceConverter o) {
+        return this.hashCode()-o.hashCode();
     }
     public V convertFromFirstTo(@NonNull T from,@NonNull Class<? extends V> classToConvert)throws IllegalArgumentException{
         if(!isConvertible(from.getClass(),classToConvert))
@@ -40,20 +51,20 @@ public abstract class PreferenceConverter<T extends Object,V extends Object> imp
     }
 
     private class Pair<O,P>{
-        private O fist;
+        private O first;
         private P second;
 
-        public Pair(O fist,P second){
-            this.fist=fist;
+        public Pair(O first, P second){
+            this.first = first;
             this.second=second;
         }
 
-        public O getFist() {
-            return fist;
+        public O getFirst() {
+            return first;
         }
 
-        public void setFist(O fist) {
-            this.fist = fist;
+        public void setFirst(O first) {
+            this.first = first;
         }
 
         public P getSecond() {
@@ -71,14 +82,14 @@ public abstract class PreferenceConverter<T extends Object,V extends Object> imp
 
             Pair<?, ?> pair = (Pair<?, ?>) o;
 
-            if (!getFist().equals(pair.getFist())) return false;
+            if (!getFirst().equals(pair.getFirst())) return false;
             return getSecond().equals(pair.getSecond());
 
         }
 
         @Override
         public int hashCode() {
-            int result = getFist().hashCode();
+            int result = getFirst().hashCode();
             result = 31 * result + getSecond().hashCode();
             return result;
         }

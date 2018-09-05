@@ -1,5 +1,6 @@
-package com.fastsoft.advancedpreference;
+package com.fastsoft.advancedpreference.units;
 
+import com.fastsoft.advancedpreference.PreferenceModelValidator;
 import com.fastsoft.advancedpreference.anotations.PreferenceOperation;
 import com.fastsoft.advancedpreference.exceptions.IllegalMethodException;
 import com.fastsoft.advancedpreference.models.PreferenceModel;

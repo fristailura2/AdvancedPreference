@@ -13,8 +13,10 @@ import com.fastsoft.advancedpreference.strateges.CompletableStrategy;
 import com.fastsoft.advancedpreference.strateges.GeneralStrategy;
 import com.fastsoft.advancedpreference.strateges.ObservableStrategy;
 import com.fastsoft.advancedpreference.strateges.VoidStrategy;
+import com.fastsoft.advancedpreference.utils.Objects;
 
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.Set;
 import java.util.TreeSet;
 
@@ -85,20 +87,34 @@ public class PreferenceConfig {
         private Set<BindingStrategy> bindingStrategies =new TreeSet<>();
         private SharedPreferences sharedPreferences;
         private PreferenceHelper preferenceHelper;
-        
-        public Builder replaceBinder(@NonNull PreferenceConverter binder){
-            preferenceConverters.add(binder);
+
+        public Builder replaceConverters(@NonNull Collection<? extends PreferenceConverter> converters){
+            Objects.throwIfNullParam(converters,"converters");
+
+            preferenceConverters.addAll(converters);
             return this;
         }
-        public Builder replaceStrategy(@NonNull BindingStrategy strategy){
+        public Builder putConverter(@NonNull PreferenceConverter converter){
+            Objects.throwIfNullParam(converter,"converter");
+
+            preferenceConverters.add(converter);
+            return this;
+        }
+        public Builder putStrategy(@NonNull BindingStrategy strategy){
+            Objects.throwIfNullParam(strategy,"strategy");
+
             bindingStrategies.add(strategy);
             return this;
         }
         public Builder setPreferences(@NonNull SharedPreferences sharedPreferences){
+            Objects.throwIfNullParam(sharedPreferences,"sharedPreferences");
+
             this.sharedPreferences=sharedPreferences;
             return this;
         }
         public Builder removeBinder(@NonNull Class<? extends PreferenceConverter> converterClass){
+            Objects.throwIfNullParam(converterClass,"converterClass");
+
             for (PreferenceConverter preferenceConverter:preferenceConverters) {
                 if(preferenceConverter.getClass().equals(converterClass)) {
                     preferenceConverters.remove(preferenceConverter);
@@ -113,7 +129,14 @@ public class PreferenceConfig {
             return this;
         }
         public  PreferenceConfig build(){
-            if(preferenceHelper ==null)
+            Objects.throwIfNull(preferenceHelper,"No PreferenceHelper");
+            Objects.throwIfNull(preferenceHelper,"No SharedPreferences");
+            if(bindingStrategies.isEmpty())
+                throw new IllegalStateException("No BindingStrategies. Cant work without");
+            if(preferenceConverters.isEmpty())
+                throw new IllegalStateException("No PreferenceConverters. Cant work without");
+
+            if(Objects.isNull(preferenceHelper))
                 preferenceHelper =new PreferenceHelper(sharedPreferences);
             return new PreferenceConfig(preferenceConverters,sharedPreferences, preferenceHelper,bindingStrategies);
         }

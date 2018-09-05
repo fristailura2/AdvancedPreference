@@ -1,4 +1,4 @@
-package com.fastsoft.advancedpreference.strategiestests;
+package com.fastsoft.advancedpreference.units.strategiestests;
 
 import com.fastsoft.advancedpreference.PreferenceHelper;
 import com.fastsoft.advancedpreference.anotations.PreferenceOperation;

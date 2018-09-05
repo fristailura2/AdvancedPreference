@@ -6,6 +6,7 @@ import com.fastsoft.advancedpreference.PreferenceHelper;
 import com.fastsoft.advancedpreference.anotations.PreferenceOperation;
 import com.fastsoft.advancedpreference.converters.PreferenceConverter;
 import com.fastsoft.advancedpreference.exceptions.NoSuchConverterException;
+import com.fastsoft.advancedpreference.utils.Objects;
 
 import java.lang.reflect.Method;
 import java.util.Set;
@@ -24,8 +25,9 @@ public class CompletableStrategy extends BaseBindingStrategy<Completable>{
     }
 
     @Override
-    @NonNull
-    public Completable bind(@NonNull Method method,@NonNull Object arg,@NonNull PreferenceOperation methodPrefAnnotation) {
+    protected Completable bindPrivate(Method method, Object arg, PreferenceOperation methodPrefAnnotation) {
+        Objects.throwIfNullParam(arg,"methodPrefAnnotation");
+
         Class<?> convertToClass = getPreferenceHelper().getPreferenceType(methodPrefAnnotation.key());
 
         Completable res=Completable.fromAction(()->{
@@ -38,7 +40,7 @@ public class CompletableStrategy extends BaseBindingStrategy<Completable>{
             }
             if(rightConverter==null)
                 throw new NoSuchConverterException(String.format("can not find converter to convert from %s to %s",arg.getClass().getSimpleName(),convertToClass.getSimpleName()));
-            getPreferenceHelper().put(rightConverter.convertFromFirstTo(arg,convertToClass),methodPrefAnnotation.key());
+                getPreferenceHelper().put(rightConverter.convertFromFirstTo(arg,convertToClass),methodPrefAnnotation.key());
         });
         return res;
     }

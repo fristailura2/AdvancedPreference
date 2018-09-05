@@ -4,8 +4,12 @@ import android.support.annotation.NonNull;
 
 import com.fastsoft.advancedpreference.PreferenceHelper;
 import com.fastsoft.advancedpreference.ReflectionUtils;
+import com.fastsoft.advancedpreference.anotations.PreferenceOperation;
 import com.fastsoft.advancedpreference.converters.PreferenceConverter;
+import com.fastsoft.advancedpreference.exceptions.NoSuchConverterException;
+import com.fastsoft.advancedpreference.utils.Objects;
 
+import java.lang.reflect.Method;
 import java.lang.reflect.Type;
 import java.util.Set;
 
@@ -16,6 +20,15 @@ import java.util.Set;
 public abstract class BaseBindingStrategy<T> implements BindingStrategy<T>,Comparable {
     private PreferenceHelper preferenceHelper;
     private Set<PreferenceConverter> preferenceConverters;
+
+    protected abstract T bindPrivate(Method method, Object arg, PreferenceOperation methodPrefAnnotation) throws NoSuchConverterException;
+
+    @Override
+    public T bind(Method method, Object arg, PreferenceOperation methodPrefAnnotation) throws NoSuchConverterException {
+        Objects.throwIfNullParam(method,"method");
+        Objects.throwIfNullParam(method,"methodPrefAnnotation");
+        return bindPrivate(method,arg,methodPrefAnnotation);
+    }
 
     public BaseBindingStrategy(PreferenceHelper preferenceHelper, Set<PreferenceConverter> preferenceConverters) {
         this.preferenceHelper = preferenceHelper;

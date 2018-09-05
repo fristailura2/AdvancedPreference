@@ -1,4 +1,4 @@
-package com.fastsoft.advancedpreference.strategiestests;
+package com.fastsoft.advancedpreference.units.strategiestests;
 
 import com.fastsoft.advancedpreference.PreferenceHelper;
 import com.fastsoft.advancedpreference.anotations.PreferenceOperation;
@@ -58,7 +58,7 @@ public class CompitableStrategyTest {
         session.finishMocking();
     }
     @Test
-    public void bindTest() throws NoSuchMethodException {
+    public void bindTest() throws NoSuchMethodException, NoSuchConverterException {
         Method testMethod=TestablePreferenceModel.class.getMethod("setPreference",String.class);
         PreferenceOperation testAnnotation=testMethod.getAnnotation(PreferenceOperation.class);
         String testVal="val";
@@ -76,7 +76,7 @@ public class CompitableStrategyTest {
         verify(preferenceHelper).put(testVal,testAnnotation.key());
     }
     @Test
-    public void noRightConverterTest() throws NoSuchMethodException {
+    public void notRightConverterTest() throws NoSuchMethodException, NoSuchConverterException {
         Method testMethod=TestablePreferenceModel.class.getMethod("setPreference",String.class);
         PreferenceOperation testAnnotation=testMethod.getAnnotation(PreferenceOperation.class);
         String testVal="val";

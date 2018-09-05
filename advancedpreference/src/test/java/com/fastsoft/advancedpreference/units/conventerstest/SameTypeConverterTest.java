@@ -1,7 +1,8 @@
-package com.fastsoft.advancedpreference.conventerstest;
+package com.fastsoft.advancedpreference.units.conventerstest;
 
 import com.fastsoft.advancedpreference.converters.SameTypeConverter;
 
+import static  org.junit.Assert.*;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
@@ -25,5 +26,11 @@ public class SameTypeConverterTest {
         sameTypeConverter.convertFromFirstTo("",String.class);
         sameTypeConverter.convertFromFirstTo(1f,Float.class);
         sameTypeConverter.convertFromFirstTo(34d,Double.class);
+    }
+    @Test
+    public void canConvertTest(){
+        assertTrue(sameTypeConverter.isConvertible(String.class,String.class));
+        assertFalse(sameTypeConverter.isConvertible(String.class,Integer.class));
+        assertFalse(sameTypeConverter.isConvertible(Integer.class,String.class));
     }
 }

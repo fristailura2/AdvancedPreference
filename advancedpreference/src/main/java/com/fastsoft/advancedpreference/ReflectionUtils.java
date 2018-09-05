@@ -9,8 +9,11 @@ import java.lang.reflect.Type;
  */
 
 public class ReflectionUtils {
-    public static Class<?> getMethodGenericReturnType(Method method,int genericIndex){
+    public static Class<?> getMethodGenericReturnClass(Method method, int genericIndex){
         return (Class)((ParameterizedType)method.getGenericReturnType()).getActualTypeArguments()[genericIndex];
+    }
+    public static Type getMethodGenericReturnType(Method method,int genericIndex){
+        return ((ParameterizedType)method.getGenericReturnType()).getActualTypeArguments()[genericIndex];
     }
     public static Type[] getParentGenericParams(Class<?> someClass){
         if(someClass.getGenericSuperclass() instanceof ParameterizedType) {

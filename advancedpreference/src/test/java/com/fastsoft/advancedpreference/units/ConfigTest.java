@@ -1,6 +1,9 @@
-package com.fastsoft.advancedpreference;
+package com.fastsoft.advancedpreference.units;
 
 import android.content.SharedPreferences;
+
+import com.fastsoft.advancedpreference.PreferenceConfig;
+
 import static org.junit.Assert.*;
 import org.junit.Before;
 import org.junit.Test;

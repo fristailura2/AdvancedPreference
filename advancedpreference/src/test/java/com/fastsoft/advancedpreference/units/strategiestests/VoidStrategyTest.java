@@ -1,4 +1,4 @@
-package com.fastsoft.advancedpreference.strategiestests;
+package com.fastsoft.advancedpreference.units.strategiestests;
 
 /**
  * Created by ura on 23-Aug-18.

@@ -1,5 +1,7 @@
 package com.fastsoft.advancedpreference.converters;
 
+import android.support.annotation.NonNull;
+
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -42,5 +44,12 @@ public class StringNumberConverter extends PreferenceConverter<String,Number> {
     @Override
     public String convertFromSecondToClass(Number from, Class<? extends String> classToConvert) {
         return from.toString();
+    }
+
+    @Override
+    public boolean isConvertible(@NonNull Class<?> first, @NonNull Class<?> second) {
+        return ((Number.class.isAssignableFrom(first)&&second.equals(String.class))||(
+                Number.class.isAssignableFrom(second)&&first.equals(String.class)));
+
     }
 }

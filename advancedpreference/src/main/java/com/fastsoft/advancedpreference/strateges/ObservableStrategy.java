@@ -5,9 +5,11 @@ import com.fastsoft.advancedpreference.ReflectionUtils;
 import com.fastsoft.advancedpreference.anotations.PreferenceOperation;
 import com.fastsoft.advancedpreference.converters.PreferenceConverter;
 import com.fastsoft.advancedpreference.exceptions.NoSuchConverterException;
+import com.fastsoft.advancedpreference.utils.Objects;
 
 import java.lang.reflect.Method;
 import java.lang.reflect.ParameterizedType;
+import java.lang.reflect.Type;
 import java.util.Set;
 
 import io.reactivex.Observable;
@@ -24,17 +26,25 @@ public class ObservableStrategy extends BaseBindingStrategy<Observable>{
 
 
     @Override
-    public Observable bind(Method method, Object arg, PreferenceOperation methodPrefAnnotation) {
+    public Observable bindPrivate(Method method, Object arg, PreferenceOperation methodPrefAnnotation) {
+        Objects.throwIfNotNullParam(arg,"arg");
+
         Observable res=getPreferenceHelper().getPreferenceObservable()
                 .map((key)-> getPreferenceHelper().get(methodPrefAnnotation.key()))
                 .map((convertedVal)->{
                     Class<?> convertFromClass = getPreferenceHelper().getPreferenceType(methodPrefAnnotation.key());
                     for (PreferenceConverter preferenceBinder: getPreferenceConverters()) {
-                        if(preferenceBinder.isConvertible(convertFromClass,(Class)((ParameterizedType)method.getGenericReturnType()).getActualTypeArguments()[0])) {
+                        Class<?> toCheck=null;
+                        Type returnType = ReflectionUtils.getMethodGenericReturnType(method,0);
+                        if (returnType instanceof Class)
+                            toCheck= (Class<?>) returnType;
+                        if (returnType instanceof ParameterizedType)
+                            toCheck= (Class<?>) ((ParameterizedType) returnType).getRawType();
+                        if(preferenceBinder.isConvertible(convertFromClass,toCheck)) {
                             return preferenceBinder.convertFromSecondTo(getPreferenceHelper().get(methodPrefAnnotation.key()),convertFromClass);
                         }
                     }
-                    throw new NoSuchConverterException(String.format("no binder to convert from %s to %s", ReflectionUtils.getMethodGenericReturnType(method,0).getSimpleName(),convertFromClass.getSimpleName()));
+                    throw new NoSuchConverterException(String.format("no binder to convert from %s to %s", ReflectionUtils.getMethodGenericReturnClass(method,0).getSimpleName(),convertFromClass.getSimpleName()));
                 });
         return res;
 
@@ -43,6 +53,6 @@ public class ObservableStrategy extends BaseBindingStrategy<Observable>{
 
     @Override
     public boolean canWorkWith(Class<?> arg) {
-        return arg.equals(java.util.Observable.class);
+        return arg.equals(Observable.class);
     }
 }
