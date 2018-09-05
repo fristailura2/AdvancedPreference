@@ -30,7 +30,7 @@ public class PreferenceHelper {
         editor.apply();
     }
     private void putInternal(Object val, String key,SharedPreferences.Editor editor){
-        Class<? extends Object> valClass = val.getClass();
+        Class<? extends Object> valClass=val.getClass();
         if(valClass.equals(String.class)){
             editor.putString(key, (String) val);
         }else if(valClass.equals(Integer.class)){
@@ -65,7 +65,8 @@ public class PreferenceHelper {
         return Observable.create(onSubscribe).doOnDispose(()->onSubscribe.close());
     }
     public Class<?> getPreferenceType(String key){
-        return sharedPreferences.getAll().get(key).getClass();
+        Object preference=sharedPreferences.getAll().get(key);
+        return preference==null?null:preference.getClass();
     }
     private class PreferenceOnSubscribe implements ObservableOnSubscribe<String> {
         private SharedPreferences sharedPreferences;

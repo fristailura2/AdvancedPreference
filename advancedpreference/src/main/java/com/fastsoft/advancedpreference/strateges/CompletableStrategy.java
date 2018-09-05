@@ -28,7 +28,11 @@ public class CompletableStrategy extends BaseBindingStrategy<Completable>{
     protected Completable bindPrivate(Method method, Object arg, PreferenceOperation methodPrefAnnotation) {
         Objects.throwIfNullParam(arg,"methodPrefAnnotation");
 
-        Class<?> convertToClass = getPreferenceHelper().getPreferenceType(methodPrefAnnotation.key());
+        Class<?> convertToClass;
+        if(getPreferenceHelper().getPreferenceType(methodPrefAnnotation.key())==null)
+            convertToClass=arg.getClass();
+        else
+            convertToClass = getPreferenceHelper().getPreferenceType(methodPrefAnnotation.key());
 
         Completable res=Completable.fromAction(()->{
             PreferenceConverter rightConverter=null;

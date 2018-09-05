@@ -23,19 +23,24 @@ public class VoidStrategy extends BaseBindingStrategy<Void>{
         Objects.throwIfNullParam(arg,"arg");
 
         Class<?> fromClass = method.getParameterTypes()[0];
-        Class<?> toClass = getPreferenceHelper().getPreferenceType(methodPrefAnnotation.key());
+
+        Class<?> convertToClass;
+        if(getPreferenceHelper().getPreferenceType(methodPrefAnnotation.key())==null)
+            convertToClass=arg.getClass();
+        else
+            convertToClass = getPreferenceHelper().getPreferenceType(methodPrefAnnotation.key());
 
         PreferenceConverter rightConverter=null;
         for (PreferenceConverter converter: getPreferenceConverters()) {
-            if(converter.isConvertible(fromClass,toClass)) {
+            if(converter.isConvertible(fromClass,convertToClass)) {
                 rightConverter=converter;
                 break;
             }
         }
         if (rightConverter == null)
-            throw new NoSuchConverterException(String.format("no binder to convert from %s to %s",fromClass.getSimpleName(),toClass));
+            throw new NoSuchConverterException(String.format("no binder to convert from %s to %s",fromClass.getSimpleName(),convertToClass));
 
-        getPreferenceHelper().put(rightConverter.convertFromFirstTo(arg, toClass), methodPrefAnnotation.key());
+        getPreferenceHelper().put(rightConverter.convertFromFirstTo(arg, convertToClass), methodPrefAnnotation.key());
         return null;
     }
 

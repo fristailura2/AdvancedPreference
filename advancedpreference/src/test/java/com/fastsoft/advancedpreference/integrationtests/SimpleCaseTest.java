@@ -60,14 +60,7 @@ public class SimpleCaseTest {
     }
     @After
     public void finalize(){
-        List<String> toDeleteKeys=new ArrayList<>();
-        sharedPreferences.getAll().forEach((key,val)->{
-            if(key.startsWith(TEST_PREFIX))
-                toDeleteKeys.add(key);
-        });
-        toDeleteKeys.forEach((key)-> sharedPreferences.edit()
-                .remove(key)
-                .commit());
+        sharedPreferences.edit().clear().commit();
     }
     @Test
     public void validTestCase() throws IllegalMethodException {
@@ -106,6 +99,21 @@ public class SimpleCaseTest {
                 testModel.setSomeInt(SOME_INT_VAL));
 
         updateAll.blockingAwait();
+    }
+    @Test
+    public void noTypeInPreferencesSetTestCase() throws IllegalMethodException {
+        sharedPreferences.edit().clear().commit();
+
+        TestModel testModel=advancedPreferences.getPreferenceModel(TestModel.class);
+        testModel.setSomeBool(SOME_BOOL_VAL);
+        testModel.setSomeInt(SOME_INT_VAL);
+        testModel.setSomeString(SOME_STRING_VAL);
+        testModel.setSomeStringSet(SOME_STRING_SET_VAL);
+
+        assertEquals(testModel.getSomeBool(),SOME_BOOL_VAL);
+        assertEquals(testModel.getSomeInt(),SOME_INT_VAL);
+        assertEquals(testModel.getSomeString(),SOME_STRING_VAL);
+        assertEquals(testModel.getSomeStringSet(),SOME_STRING_SET_VAL);
     }
     public interface TestModel extends PreferenceModel{
         @PreferenceOperation(key = TEST_PREFIX+SOME_INT_KEY)

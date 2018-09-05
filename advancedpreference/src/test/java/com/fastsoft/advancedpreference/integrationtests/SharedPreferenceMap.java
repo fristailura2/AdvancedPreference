@@ -3,11 +3,14 @@ package com.fastsoft.advancedpreference.integrationtests;
 import android.content.SharedPreferences;
 import android.support.annotation.Nullable;
 
+import java.util.Collection;
+import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.TreeMap;
+import java.util.TreeSet;
 
 public class SharedPreferenceMap implements SharedPreferences{
     private Map<String,Object> preferenceStorage=new TreeMap<>();
@@ -69,76 +72,89 @@ public class SharedPreferenceMap implements SharedPreferences{
     public void unregisterOnSharedPreferenceChangeListener(OnSharedPreferenceChangeListener listener) {
         onSharedPreferenceChangeListeners.remove(listener);
     }
-    private void fireChangeEvent(Map<String,Object> preferenceStorage){
-        for (String key:preferenceStorage.keySet()) {
+    private void fireChangeEvent(Map<String,Object> toAdd,Set<String> toRemove){
+        Set<String> fullChanged=new TreeSet(toAdd.keySet());
+        fullChanged.addAll(toRemove);
+
+        for (String key:fullChanged) {
             for (OnSharedPreferenceChangeListener listener:onSharedPreferenceChangeListeners) {
                 listener.onSharedPreferenceChanged(this,key);
             }
         }
-
     }
     class MapEditor implements Editor{
-        private Map<String,Object> preferenceStorage;
+        private Map<String,Object> toAddPreferenceStorage;
+        private Set<String> toRemoveKeys;
         
         public MapEditor(){
-            preferenceStorage=new TreeMap<>();
+            toAddPreferenceStorage =new TreeMap<>();
+            toRemoveKeys=new TreeSet<>();
         }
         @Override
         public Editor putString(String key, @Nullable String value) {
-            preferenceStorage.put(key,value);
+            toAddPreferenceStorage.put(key,value);
             return this;
         }
         @Override
         public Editor putStringSet(String key, @Nullable Set<String> values) {
-            preferenceStorage.put(key,values);
+            toAddPreferenceStorage.put(key,values);
             return this;
         }
         @Override
         public Editor putInt(String key, int value) {
-            preferenceStorage.put(key,value);
+            toAddPreferenceStorage.put(key,value);
             return this;
         }
         @Override
         public Editor putLong(String key, long value) {
-            preferenceStorage.put(key,value);
+            toAddPreferenceStorage.put(key,value);
             return this;
         }
 
         @Override
         public Editor putFloat(String key, float value) {
-            preferenceStorage.put(key,value);
+            toAddPreferenceStorage.put(key,value);
             return this;
         }
 
         @Override
         public Editor putBoolean(String key, boolean value) {
-            preferenceStorage.put(key,value);
+            toAddPreferenceStorage.put(key,value);
             return this;
         }
 
         @Override
         public Editor remove(String key) {
-            preferenceStorage.remove(key);
+            toRemoveKeys.add(key);
             return this;
         }
 
         @Override
         public Editor clear() {
-            preferenceStorage.clear();
+            toRemoveKeys.addAll(preferenceStorage.keySet());
             return this;
         }
 
         @Override
         public boolean commit() {
-            SharedPreferenceMap.this.preferenceStorage.putAll(preferenceStorage);
-            fireChangeEvent(preferenceStorage);
+            replaceAll();
+            SharedPreferenceMap.this.preferenceStorage.putAll(toAddPreferenceStorage);
+
+            fireChangeEvent(toAddPreferenceStorage,toRemoveKeys);
             return true;
         }
 
         @Override
         public void apply() {
-            fireChangeEvent(preferenceStorage);
-            SharedPreferenceMap.this.preferenceStorage.putAll(preferenceStorage);
+            replaceAll();
+            SharedPreferenceMap.this.preferenceStorage.putAll(toAddPreferenceStorage);
+
+            fireChangeEvent(toAddPreferenceStorage,toRemoveKeys);
+        }
+        private void replaceAll(){
+            for (String key:toRemoveKeys) {
+                preferenceStorage.remove(key);
+            }
         }
     } 
 }

@@ -29,8 +29,6 @@ ext {
     licenseName = 'The Apache Software License, Version 2.0'
     licenseUrl = 'http://www.apache.org/licenses/LICENSE-2.0.txt'
     allLicenses = ["Apache-2.0"]
-
-
 }
 
 android {
@@ -60,14 +58,14 @@ android {
 }
 
 dependencies {
-    compile fileTree(include: ['*.jar'], dir: 'libs')
+    implementation fileTree(include: ['*.jar'], dir: 'libs')
 
     testImplementation 'junit:junit:4.12'
     testImplementation group: 'org.mockito', name: 'mockito-android', version: '2.20.1'
     testImplementation group: 'org.mockito', name: 'mockito-core', version: '2.20.1'
 
-    compile 'io.reactivex.rxjava2:rxandroid:2.0.2'
-    compile 'com.android.support:support-annotations:27.1.1'
+    implementation 'io.reactivex.rxjava2:rxandroid:2.0.2'
+    implementation 'com.android.support:support-annotations:27.1.1'
 
 }
 
@@ -75,13 +73,9 @@ dependencies {
 if (project.rootProject.file('local.properties').exists()) {
     def installfile=new File('installv1.gradle')
     def bintrayfile=new File('bintrayv1.gradle')
-    def install = installfile.newOutputStream()
-    def bintray = bintrayfile.newOutputStream()
     if(!(installfile.exists()&&bintrayfile.exists())) {
-        install << new URL("https://raw.githubusercontent.com/nuuneoi/JCenter/master/installv1.gradle")
-        bintray << new URL("https://raw.githubusercontent.com/nuuneoi/JCenter/master/bintrayv1.gradle")
-        install.close()
-        bintray.close()
+        installfile << new URL("https://raw.githubusercontent.com/nuuneoi/JCenter/master/installv1.gradle").openStream()
+        bintrayfile << new URL("https://raw.githubusercontent.com/nuuneoi/JCenter/master/bintrayv1.gradle").openStream()
     }
     apply from: installfile.getAbsolutePath()
     apply from: bintrayfile.getAbsolutePath()
