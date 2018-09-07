@@ -26,12 +26,15 @@ import java.util.TreeSet;
 
 import io.reactivex.Completable;
 import io.reactivex.Observable;
+import io.reactivex.disposables.CompositeDisposable;
+import io.reactivex.disposables.Disposable;
 import io.reactivex.internal.operators.completable.CompletableConcatIterable;
 
 @RunWith(JUnit4.class)
 public class SimpleCaseTest {
     SharedPreferences sharedPreferences;
     AdvancedPreferences advancedPreferences;
+    CompositeDisposable disposables=new CompositeDisposable();
 
     final static String TEST_PREFIX="simple_test_";
     final static String SOME_BOOL_KEY="someBool";
@@ -60,6 +63,8 @@ public class SimpleCaseTest {
     }
     @After
     public void finalize(){
+        disposables.dispose();
+        disposables.clear();
         sharedPreferences.edit().clear().commit();
     }
     @Test
@@ -87,10 +92,10 @@ public class SimpleCaseTest {
     public void validReactiveTestCase() throws IllegalMethodException {
 
         ReactiveTestModel testModel=advancedPreferences.getPreferenceModel(ReactiveTestModel.class);
-        testModel.getSomeBool().subscribe((val)->assertEquals(SOME_BOOL_VAL,val),(throwable)->assertTrue(false));
-        testModel.getSomeInt().subscribe((val)->assertEquals(SOME_INT_VAL,val),(throwable)->assertTrue(false));
-        testModel.getSomeString().subscribe((val)->assertEquals(SOME_STRING_VAL,val),(throwable)->assertTrue(false));
-        testModel.getSomeStringSet().subscribe((val)->assertEquals(SOME_STRING_SET_VAL,val),(throwable)->assertTrue(false));
+        disposables.add(testModel.getSomeBool().subscribe((val)->assertEquals(SOME_BOOL_VAL,val),(throwable)->assertTrue(false)));
+        disposables.add(testModel.getSomeInt().subscribe((val)->assertEquals(SOME_INT_VAL,val),(throwable)->assertTrue(false)));
+        disposables.add(testModel.getSomeString().subscribe((val)->assertEquals(SOME_STRING_VAL,val),(throwable)->assertTrue(false)));
+        disposables.add(testModel.getSomeStringSet().subscribe((val)->assertEquals(SOME_STRING_SET_VAL,val),(throwable)->assertTrue(false)));
 
         Completable updateAll =Completable.mergeArray(
                 testModel.setSomeBool(SOME_BOOL_VAL),
@@ -114,6 +119,21 @@ public class SimpleCaseTest {
         assertEquals(testModel.getSomeInt(),SOME_INT_VAL);
         assertEquals(testModel.getSomeString(),SOME_STRING_VAL);
         assertEquals(testModel.getSomeStringSet(),SOME_STRING_SET_VAL);
+    }
+    @Test
+    public void simpleConcretTest() throws IllegalMethodException {
+        ConcreteTestModel testModel=advancedPreferences.getPreferenceModel(ConcreteTestModel.class);
+        testModel.setSomeStringSet(SOME_STRING_SET_VAL);
+        List<String> res=testModel.getSomeStringSet();
+        assertEquals(SOME_STRING_SET_VAL,new TreeSet<>(res));
+    }
+    @Test
+    public void RXConcretTest() throws IllegalMethodException {
+        ConcreteTestModel testModel=advancedPreferences.getPreferenceModel(ConcreteTestModel.class);
+        Completable set=testModel.setSomeStringSetCompletable(SOME_STRING_SET_VAL);
+        Observable<List<String>> get=testModel.getSomeStringSetObservable();
+        disposables.add(get.subscribe((stringList)->assertEquals(SOME_STRING_SET_VAL,new TreeSet<>(stringList))));
+        set.blockingAwait();
     }
     public interface TestModel extends PreferenceModel{
         @PreferenceOperation(key = TEST_PREFIX+SOME_INT_KEY)
@@ -150,5 +170,15 @@ public class SimpleCaseTest {
         Completable setSomeBool(Boolean someVal);
         @PreferenceOperation(key = TEST_PREFIX+SOME_STRING_SET_KEY)
         Completable setSomeStringSet(Set<String> someVal);
+    }
+    public interface ConcreteTestModel extends PreferenceModel{
+        @PreferenceOperation(concreteClass =ArrayList.class, key = TEST_PREFIX+SOME_STRING_SET_KEY)
+        ArrayList<String> getSomeStringSet();
+        @PreferenceOperation(concreteClass =ArrayList.class, key = TEST_PREFIX+SOME_STRING_SET_KEY)
+        Observable<List<String>> getSomeStringSetObservable();
+        @PreferenceOperation(concreteClass =TreeSet.class, key = TEST_PREFIX+SOME_STRING_SET_KEY)
+        void setSomeStringSet(Set<String> TreeSet);
+        @PreferenceOperation(concreteClass =TreeSet.class, key = TEST_PREFIX+SOME_STRING_SET_KEY)
+        Completable setSomeStringSetCompletable(Set<String> stringSet);
     }
 }

@@ -23,7 +23,7 @@ public class NumberConverter extends PreferenceConverter<Number,Number> {
 
     @Override
     public boolean isConvertible(Class<?> first, Class<?> second) {
-        return Number.class.isAssignableFrom(first)&&Number.class.isAssignableFrom(second);
+        return Number.class.isAssignableFrom(first)&&Number.class.isAssignableFrom(second)&&(!first.equals(second));
     }
     private Number convert(Number from, Class<? extends Number> classToConvert){
         Number number=convertPrimitives(from,classToConvert);

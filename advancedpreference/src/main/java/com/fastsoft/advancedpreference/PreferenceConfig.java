@@ -6,6 +6,7 @@ import android.support.annotation.NonNull;
 import com.fastsoft.advancedpreference.converters.CollectionsConverter;
 import com.fastsoft.advancedpreference.converters.NumberConverter;
 import com.fastsoft.advancedpreference.converters.PreferenceConverter;
+import com.fastsoft.advancedpreference.converters.PrimitiveConverter;
 import com.fastsoft.advancedpreference.converters.SameTypeConverter;
 import com.fastsoft.advancedpreference.converters.StringNumberConverter;
 import com.fastsoft.advancedpreference.strateges.BindingStrategy;
@@ -46,11 +47,13 @@ public class PreferenceConfig {
         ));
     }
     private static Set<PreferenceConverter> provideDefaultBinders(){
+        NumberConverter numberConverter=new NumberConverter();
         return new TreeSet<>(Arrays.asList(
                 new CollectionsConverter(),
-                new NumberConverter(),
+                numberConverter,
                 new StringNumberConverter(),
-                new SameTypeConverter()
+                new SameTypeConverter(),
+                new PrimitiveConverter(numberConverter)
         ));
     }
 

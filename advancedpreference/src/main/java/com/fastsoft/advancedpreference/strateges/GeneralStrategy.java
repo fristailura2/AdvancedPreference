@@ -29,10 +29,27 @@ public class GeneralStrategy extends BaseBindingStrategy{
         Objects.throwIfNotNullParam(arg,"arg");
 
         Object prefVal = getPreferenceHelper().get(methodPrefAnnotation.key());
+        if(prefVal==null)
+            return null;
+
         Set<PreferenceConverter> binders = getPreferenceConverters();
+
+        Class<?> fromClass;
+        Class<?> toClass=method.getReturnType();
+
+        if(prefVal.getClass().isInterface()&&
+                methodPrefAnnotation.concreteClass()!=Void.class&&
+                method.getReturnType().isAssignableFrom(methodPrefAnnotation.concreteClass())){
+            fromClass = methodPrefAnnotation.concreteClass();
+        }else{
+            if(prefVal.getClass().isInterface())
+                throw new IllegalArgumentException("Interface as return type can not be used without concreteClass param in PreferenceOperation annotation");
+            fromClass = prefVal.getClass();
+        }
+
         for (PreferenceConverter binder:binders) {
-            if(binder.isConvertible(prefVal.getClass(),method.getReturnType())){
-                return binder.convertFromFirstTo(prefVal,method.getReturnType());
+            if(binder.isConvertible(fromClass,toClass)){
+                return binder.convertFromFirstTo(prefVal,toClass);
             }
         }
         throw new NoSuchConverterException(String.format("no binder to convert from %s to %s",prefVal.getClass(),method.getReturnType()));

@@ -20,7 +20,7 @@ ext {
     siteUrl = 'https://github.com/fristailura2/AdvancedPreference'
     gitUrl = 'https://github.com/fristailura2/AdvancedPreference.git'
 
-    libraryVersion = '0.0.4'
+    libraryVersion = '0.0.5'
 
     developerId = 'fristailura'
     developerName = 'Kyryrechko Yurii'
@@ -37,7 +37,7 @@ android {
     defaultConfig {
         minSdkVersion 14
         targetSdkVersion 27
-        versionCode 4
+        versionCode 5
         versionName project.getProperties().get(libraryVersion)
 
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"

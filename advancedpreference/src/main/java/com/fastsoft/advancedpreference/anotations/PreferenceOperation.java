@@ -12,4 +12,5 @@ import java.lang.annotation.Target;
 @Target(ElementType.METHOD)
 public @interface PreferenceOperation {
     String key();
+    Class concreteClass()default Void.class;
 }

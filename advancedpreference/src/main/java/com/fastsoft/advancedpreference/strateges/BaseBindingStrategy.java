@@ -3,7 +3,7 @@ package com.fastsoft.advancedpreference.strateges;
 import android.support.annotation.NonNull;
 
 import com.fastsoft.advancedpreference.PreferenceHelper;
-import com.fastsoft.advancedpreference.ReflectionUtils;
+import com.fastsoft.advancedpreference.utils.ReflectionUtils;
 import com.fastsoft.advancedpreference.anotations.PreferenceOperation;
 import com.fastsoft.advancedpreference.converters.PreferenceConverter;
 import com.fastsoft.advancedpreference.exceptions.NoSuchConverterException;
@@ -27,6 +27,7 @@ public abstract class BaseBindingStrategy<T> implements BindingStrategy<T>,Compa
     public T bind(Method method, Object arg, PreferenceOperation methodPrefAnnotation) throws NoSuchConverterException {
         Objects.throwIfNullParam(method,"method");
         Objects.throwIfNullParam(method,"methodPrefAnnotation");
+
         return bindPrivate(method,arg,methodPrefAnnotation);
     }
 

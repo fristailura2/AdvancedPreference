@@ -1,7 +1,7 @@
 package com.fastsoft.advancedpreference.strateges;
 
 import com.fastsoft.advancedpreference.PreferenceHelper;
-import com.fastsoft.advancedpreference.ReflectionUtils;
+import com.fastsoft.advancedpreference.utils.ReflectionUtils;
 import com.fastsoft.advancedpreference.anotations.PreferenceOperation;
 import com.fastsoft.advancedpreference.converters.PreferenceConverter;
 import com.fastsoft.advancedpreference.exceptions.NoSuchConverterException;
@@ -30,18 +30,32 @@ public class ObservableStrategy extends BaseBindingStrategy<Observable>{
         Objects.throwIfNotNullParam(arg,"arg");
 
         Observable res=getPreferenceHelper().getPreferenceObservable()
+                .filter((key)->getPreferenceHelper().get(methodPrefAnnotation.key())!=null)
                 .map((key)-> getPreferenceHelper().get(methodPrefAnnotation.key()))
                 .map((convertedVal)->{
-                    Class<?> convertFromClass = getPreferenceHelper().getPreferenceType(methodPrefAnnotation.key());
+
+                    Class<?> convertFromClass;
+                    Class<?> convertToClass=null;
+
+                    Type returnType = ReflectionUtils.getMethodGenericReturnType(method,0);
+                    if (returnType instanceof Class)
+                        convertToClass= (Class<?>) returnType;
+                    if (returnType instanceof ParameterizedType)
+                        convertToClass= (Class<?>) ((ParameterizedType) returnType).getRawType();
+
+                    if(convertedVal.getClass().isInterface()&&
+                            methodPrefAnnotation.concreteClass()!=Void.class&&
+                            method.getReturnType().isAssignableFrom(methodPrefAnnotation.concreteClass())){
+                        convertFromClass = methodPrefAnnotation.concreteClass();
+                    }else{
+                        if(convertedVal.getClass().isInterface())
+                            throw new IllegalArgumentException("Interface as return type can not be used without concreteClass param in PreferenceOperation annotation");
+                        convertFromClass = convertedVal.getClass();
+                    }
+
                     for (PreferenceConverter preferenceBinder: getPreferenceConverters()) {
-                        Class<?> toCheck=null;
-                        Type returnType = ReflectionUtils.getMethodGenericReturnType(method,0);
-                        if (returnType instanceof Class)
-                            toCheck= (Class<?>) returnType;
-                        if (returnType instanceof ParameterizedType)
-                            toCheck= (Class<?>) ((ParameterizedType) returnType).getRawType();
-                        if(preferenceBinder.isConvertible(convertFromClass,toCheck)) {
-                            return preferenceBinder.convertFromSecondTo(getPreferenceHelper().get(methodPrefAnnotation.key()),convertFromClass);
+                        if(preferenceBinder.isConvertible(convertFromClass,convertToClass)) {
+                            return preferenceBinder.convertFromSecondTo(convertedVal,convertFromClass);
                         }
                     }
                     throw new NoSuchConverterException(String.format("no binder to convert from %s to %s", ReflectionUtils.getMethodGenericReturnClass(method,0).getSimpleName(),convertFromClass.getSimpleName()));

@@ -39,6 +39,6 @@ public class CollectionsConverter extends PreferenceConverter<Collection,Collect
     }
     @Override
     public boolean isConvertible(Class<?> first, Class<?> second) {
-        return Collection.class.isAssignableFrom(first)&&Collection.class.isAssignableFrom(second);
+        return (Collection.class.isAssignableFrom(first)&&Collection.class.isAssignableFrom(second));
     }
 }

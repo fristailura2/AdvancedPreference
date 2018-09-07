@@ -12,6 +12,8 @@ import java.math.BigDecimal;
 import java.math.BigInteger;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
+
 /**
  * Created by ura on 22-Aug-18.
  */
@@ -34,10 +36,10 @@ public class NumberConverterTest {
     }
     @Test
     public void convertTest(){
-        namberBinder.convertFromFirstTo(new Integer(1),Integer.class);
-        namberBinder.convertFromFirstTo(new Integer(2),Float.class);
-        namberBinder.convertFromFirstTo(new Integer(3),Double.class);
-        namberBinder.convertFromFirstTo(new Integer(4),BigInteger.class);
-        namberBinder.convertFromFirstTo(new Integer(5),BigDecimal.class);
+        assertTrue(1==namberBinder.convertFromFirstTo(1,Short.class).intValue());
+        assertTrue(2==namberBinder.convertFromFirstTo(2,Float.class).intValue());
+        assertTrue(3==namberBinder.convertFromFirstTo(3,Double.class).intValue());
+        assertTrue(4==namberBinder.convertFromFirstTo(4,BigInteger.class).intValue());
+        assertTrue(5==namberBinder.convertFromFirstTo(5,BigDecimal.class).intValue());
     }
 }
