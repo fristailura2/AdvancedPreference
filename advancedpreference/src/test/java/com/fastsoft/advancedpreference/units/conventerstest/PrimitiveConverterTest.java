@@ -39,10 +39,8 @@ public class PrimitiveConverterTest {
         Assert.assertTrue(primitiveConverter.isConvertible(int.class,short.class));
         Assert.assertTrue(primitiveConverter.isConvertible(int.class,byte.class));
         Assert.assertTrue(primitiveConverter.isConvertible(int.class,double.class));
-        Assert.assertFalse(primitiveConverter.isConvertible(int.class,int.class));
         Assert.assertFalse(primitiveConverter.isConvertible(char.class,int.class));
         Assert.assertFalse(primitiveConverter.isConvertible(int.class,char.class));
         Assert.assertFalse(primitiveConverter.isConvertible(void.class,char.class));
-        Assert.assertFalse(primitiveConverter.isConvertible(Long.class,Integer.class));
     }
 }

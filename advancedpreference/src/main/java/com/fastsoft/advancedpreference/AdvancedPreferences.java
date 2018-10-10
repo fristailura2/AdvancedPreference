@@ -76,14 +76,17 @@ public class AdvancedPreferences implements InvocationHandler{
         for (BindingStrategy strategy : preferenceConfig.getBindingStrategies()) {
             if (strategy.canWorkWith(method.getReturnType())) {
                 boolean checkRes=true;
-                for (Annotation paramAnnotation:method.getParameterAnnotations()[0]) {
-                    if(paramAnnotation.annotationType().equals(DefVal.class)){
-                        checkRes=false;
-                        break;
+                if(method.getParameterTypes().length!=0) {
+                    checkRes=false;
+                    for (Annotation paramAnnotation : method.getParameterAnnotations()[0]) {
+                        if (paramAnnotation.annotationType().equals(DefVal.class)) {
+                            checkRes = true;
+                            break;
+                        }
                     }
                 }
 
-                res = strategy.bind(method, (Objects.isNull(args) || args.length == 0||!checkRes ? null : args[0]), methodPrefAnnot,getDefVal(method,args));
+                res = strategy.bind(method, (checkRes ? null : args[0]), methodPrefAnnot,getDefVal(method,args));
                 return res;
             }
         }
