@@ -2,6 +2,7 @@ package com.fastsoft.advancedpreference;
 
 import android.support.annotation.NonNull;
 
+import com.fastsoft.advancedpreference.anotations.DefVal;
 import com.fastsoft.advancedpreference.anotations.PreferenceOperation;
 import com.fastsoft.advancedpreference.exceptions.IllegalMethodException;
 import com.fastsoft.advancedpreference.exceptions.NoSuchBindingStrategyException;
@@ -9,9 +10,11 @@ import com.fastsoft.advancedpreference.models.PreferenceModel;
 import com.fastsoft.advancedpreference.strateges.BindingStrategy;
 import com.fastsoft.advancedpreference.utils.Objects;
 
+import java.lang.annotation.Annotation;
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
 import java.lang.reflect.Proxy;
+import java.util.Arrays;
 
 /**
  * Created by ura on 11-Aug-18.
@@ -53,6 +56,17 @@ public class AdvancedPreferences implements InvocationHandler{
         return preferenceModel;
     }
 
+    private Object getDefVal(Method method, Object[] args){
+        Annotation[][] paramsAnnotations = method.getParameterAnnotations();
+        for (Annotation[] paramAnnotations :paramsAnnotations) {
+            for (Annotation annotation : Arrays.asList(paramAnnotations)) {
+                if(annotation.annotationType().equals(DefVal.class))
+                    return args[Arrays.asList(paramsAnnotations).indexOf(paramAnnotations)];
+            }
+        }
+        return null;
+    }
+
     @Override
     public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
         PreferenceOperation methodPrefAnnot = method.getAnnotation(PreferenceOperation.class);
@@ -61,7 +75,15 @@ public class AdvancedPreferences implements InvocationHandler{
 
         for (BindingStrategy strategy : preferenceConfig.getBindingStrategies()) {
             if (strategy.canWorkWith(method.getReturnType())) {
-                res = strategy.bind(method, (Objects.isNull(args) || args.length == 0) ? null : args[0], methodPrefAnnot);
+                boolean checkRes=true;
+                for (Annotation paramAnnotation:method.getParameterAnnotations()[0]) {
+                    if(paramAnnotation.annotationType().equals(DefVal.class)){
+                        checkRes=false;
+                        break;
+                    }
+                }
+
+                res = strategy.bind(method, (Objects.isNull(args) || args.length == 0||!checkRes ? null : args[0]), methodPrefAnnot,getDefVal(method,args));
                 return res;
             }
         }

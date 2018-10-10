@@ -13,7 +13,7 @@ import java.util.Set;
  */
 
 public interface BindingStrategy<T> {
-    T bind(Method method, Object arg,PreferenceOperation methodPrefAnnotation) throws NoSuchConverterException;
+    T bind(Method method, Object arg, PreferenceOperation methodPrefAnnotation, Object defVal) throws NoSuchConverterException;
     void setPreferenceHelper(PreferenceHelper preferenceHelper);
     void setPreferenceConverters(Set<PreferenceConverter> preferenceConverters);
     PreferenceHelper getPreferenceHelper();

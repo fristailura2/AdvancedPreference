@@ -67,7 +67,7 @@ public class VoidStrategyTest {
         when(preferenceConverter.convertFromFirstTo(any(String.class),any())).then((mock)->mock.getArgument(0));
         preferenceConverters.add(preferenceConverter);
 
-        assertNull(strategy.bind(testablePreferenceModel.getClass().getMethod("setPreference",String.class),testVal,testAnnotation));
+        assertNull(strategy.bind(testablePreferenceModel.getClass().getMethod("setPreference",String.class),testVal,testAnnotation, null));
 
         verify(preferenceHelper).put(eq(testVal),eq(testAnnotation.key()));
         verify(preferenceConverter).convertFromFirstTo(any(String.class),any());
@@ -82,7 +82,7 @@ public class VoidStrategyTest {
 
         doReturn(false).when(preferenceConverter).isConvertible(any(),any());
 
-        strategy.bind(testablePreferenceModel.getClass().getMethod("setPreference",String.class),testVal,testAnnotation);
+        strategy.bind(testablePreferenceModel.getClass().getMethod("setPreference",String.class),testVal,testAnnotation, null);
     }
     interface TestablePreferenceModel extends PreferenceModel {
         @PreferenceOperation(key = "key")

@@ -1,11 +1,10 @@
 package com.fastsoft.advancedpreference.integrationtests;
 
-import android.content.Context;
-
 import android.content.SharedPreferences;
 
 import com.fastsoft.advancedpreference.AdvancedPreferences;
 import com.fastsoft.advancedpreference.PreferenceConfig;
+import com.fastsoft.advancedpreference.anotations.DefVal;
 import com.fastsoft.advancedpreference.anotations.PreferenceOperation;
 import com.fastsoft.advancedpreference.exceptions.IllegalMethodException;
 import com.fastsoft.advancedpreference.models.PreferenceModel;
@@ -27,8 +26,6 @@ import java.util.TreeSet;
 import io.reactivex.Completable;
 import io.reactivex.Observable;
 import io.reactivex.disposables.CompositeDisposable;
-import io.reactivex.disposables.Disposable;
-import io.reactivex.internal.operators.completable.CompletableConcatIterable;
 
 @RunWith(JUnit4.class)
 public class SimpleCaseTest {
@@ -121,19 +118,27 @@ public class SimpleCaseTest {
         assertEquals(testModel.getSomeStringSet(),SOME_STRING_SET_VAL);
     }
     @Test
-    public void simpleConcretTest() throws IllegalMethodException {
+    public void simpleConcreteTest() throws IllegalMethodException {
         ConcreteTestModel testModel=advancedPreferences.getPreferenceModel(ConcreteTestModel.class);
         testModel.setSomeStringSet(SOME_STRING_SET_VAL);
         List<String> res=testModel.getSomeStringSet();
         assertEquals(SOME_STRING_SET_VAL,new TreeSet<>(res));
     }
     @Test
-    public void RXConcretTest() throws IllegalMethodException {
+    public void RXConcreteTest() throws IllegalMethodException {
         ConcreteTestModel testModel=advancedPreferences.getPreferenceModel(ConcreteTestModel.class);
         Completable set=testModel.setSomeStringSetCompletable(SOME_STRING_SET_VAL);
         Observable<List<String>> get=testModel.getSomeStringSetObservable();
         disposables.add(get.subscribe((stringList)->assertEquals(SOME_STRING_SET_VAL,new TreeSet<>(stringList))));
         set.blockingAwait();
+    }
+    @Test
+    public void NoValInPrefSimpleTest() throws IllegalMethodException {
+        DefValTestModel testModel=advancedPreferences.getPreferenceModel(DefValTestModel.class);
+        int val=testModel.getSomeInteger(0);
+        assertEquals(0,val);
+        testModel.setSomeInteger(1);
+        assertEquals(testModel.getSomeInteger(0),1);
     }
     public interface TestModel extends PreferenceModel{
         @PreferenceOperation(key = TEST_PREFIX+SOME_INT_KEY)
@@ -180,5 +185,11 @@ public class SimpleCaseTest {
         void setSomeStringSet(Set<String> TreeSet);
         @PreferenceOperation(concreteClass =TreeSet.class, key = TEST_PREFIX+SOME_STRING_SET_KEY)
         Completable setSomeStringSetCompletable(Set<String> stringSet);
+    }
+    public interface DefValTestModel extends PreferenceModel{
+        @PreferenceOperation(key = TEST_PREFIX+"_any_int")
+        int getSomeInteger(@DefVal int baseval);
+        @PreferenceOperation(key = TEST_PREFIX+"_any_int")
+        void setSomeInteger(int val);
     }
 }

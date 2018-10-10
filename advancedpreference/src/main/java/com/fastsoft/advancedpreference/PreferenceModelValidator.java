@@ -26,7 +26,7 @@ public class PreferenceModelValidator {
         if(method.getParameterTypes().length>1)
             throw new IllegalMethodException(String.format("The method %s cant have more then one param.",method.getName()));
         if(method.getAnnotation(PreferenceOperation.class)==null)
-            throw new IllegalMethodException(String.format("The method %s cant have more then one param.",method.getName()));
+            throw new IllegalMethodException(String.format("The method %s cant be not annotated with PreferenceOperation or Ignore",method.getName()));
         if(!(method.getParameterTypes().length != 0 || !method.getReturnType().equals(Void.TYPE)))
             throw new IllegalMethodException(String.format("The void method %s cant be without param.",method.getName()));
     }

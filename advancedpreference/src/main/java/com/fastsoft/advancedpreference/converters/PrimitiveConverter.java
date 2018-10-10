@@ -28,7 +28,9 @@ public class PrimitiveConverter extends PreferenceConverter {
 
     @Override
     public boolean isConvertible(@NonNull Class first, @NonNull Class second) {
-        return  numberConverter.isConvertible(ReflectionUtils.findWrapByPrimitive(first),ReflectionUtils.findWrapByPrimitive(second))&&
-                (first.isPrimitive()||second.isPrimitive());
+        Class wrappedFirst = ReflectionUtils.findWrapByPrimitive(first);
+        Class wrappedSecond = ReflectionUtils.findWrapByPrimitive(second);
+
+        return  (numberConverter.isConvertible(wrappedFirst,wrappedSecond)||wrappedFirst.equals(wrappedSecond));
     }
 }

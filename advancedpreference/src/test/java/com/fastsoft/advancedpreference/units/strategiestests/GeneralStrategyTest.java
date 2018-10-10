@@ -70,7 +70,7 @@ public class GeneralStrategyTest {
         when(preferenceConverter.convertFromFirstTo(any(String.class),any())).then((mock)->mock.getArgument(0));
         preferenceConverters.add(preferenceConverter);
 
-        Assert.assertEquals(strategy.bind(testMethod,null,testAnnotation),testVal);
+        Assert.assertEquals(strategy.bind(testMethod,null,testAnnotation, null),testVal);
 
         verify(preferenceHelper).get(eq(testAnnotation.key()));
         verify(preferenceConverter).convertFromFirstTo(any(String.class),any());
@@ -86,7 +86,7 @@ public class GeneralStrategyTest {
         doReturn(testVal).when(preferenceHelper).get(testAnnotation.key());
         preferenceConverters.add(preferenceConverter);
 
-        strategy.bind(testablePreferenceModel.getClass().getMethod("getPreference"),null,testAnnotation);
+        strategy.bind(testablePreferenceModel.getClass().getMethod("getPreference"),null,testAnnotation, null);
     }
     interface TestablePreferenceModel extends PreferenceModel {
         @PreferenceOperation(key = "key")

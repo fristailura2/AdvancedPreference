@@ -26,12 +26,17 @@ public class ObservableStrategy extends BaseBindingStrategy<Observable>{
 
 
     @Override
-    public Observable bindPrivate(Method method, Object arg, PreferenceOperation methodPrefAnnotation) {
+    public Observable bindPrivate(Method method, Object arg, PreferenceOperation methodPrefAnnotation, Object defVal) {
         Objects.throwIfNotNullParam(arg,"arg");
 
         Observable res=getPreferenceHelper().getPreferenceObservable()
-                .filter((key)->getPreferenceHelper().get(methodPrefAnnotation.key())!=null)
-                .map((key)-> getPreferenceHelper().get(methodPrefAnnotation.key()))
+                .filter((key)->getPreferenceHelper().get(methodPrefAnnotation.key())!=null||defVal!=null)
+                .map((key)->{
+                    Object val = getPreferenceHelper().get(methodPrefAnnotation.key());
+                    if(val==null)
+                        val=defVal;
+                    return val;
+                })
                 .map((convertedVal)->{
 
                     Class<?> convertFromClass;

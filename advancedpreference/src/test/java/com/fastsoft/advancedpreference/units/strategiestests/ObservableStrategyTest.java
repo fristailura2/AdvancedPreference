@@ -85,7 +85,7 @@ public class ObservableStrategyTest {
             emitter.onComplete();
         }));
 
-        Observable<String> binder=strategy.bind(testMethod,null,testAnnotation);
+        Observable<String> binder=strategy.bind(testMethod,null,testAnnotation, null);
         Single binder2=binder.reduce(new String(""),(s, s2) -> s+s2);
         binder2.blockingGet();
 

@@ -25,7 +25,7 @@ public class CompletableStrategy extends BaseBindingStrategy<Completable>{
     }
 
     @Override
-    protected Completable bindPrivate(Method method, Object arg, PreferenceOperation methodPrefAnnotation) {
+    protected Completable bindPrivate(Method method, Object arg, PreferenceOperation methodPrefAnnotation, Object defVal) {
         Objects.throwIfNullParam(arg,"methodPrefAnnotation");
 
         Class<?> convertToClass;
@@ -44,7 +44,7 @@ public class CompletableStrategy extends BaseBindingStrategy<Completable>{
             }
             if(rightConverter==null)
                 throw new NoSuchConverterException(String.format("can not find converter to convert from %s to %s",arg.getClass().getSimpleName(),convertToClass.getSimpleName()));
-                getPreferenceHelper().put(rightConverter.convertFromFirstTo(arg,convertToClass),methodPrefAnnotation.key());
+            getPreferenceHelper().put(rightConverter.convertFromFirstTo(arg,convertToClass),methodPrefAnnotation.key());
         });
         return res;
     }

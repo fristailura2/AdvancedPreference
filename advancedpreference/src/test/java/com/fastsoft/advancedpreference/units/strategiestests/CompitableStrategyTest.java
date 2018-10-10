@@ -68,7 +68,7 @@ public class CompitableStrategyTest {
         doReturn(testVal).when(preferenceConverter).convertFromFirstTo(any(),any());
         doReturn(testVal.getClass()).when(preferenceHelper).getPreferenceType(testAnnotation.key());
 
-        Completable binder=strategy.bind(testMethod,testVal,testAnnotation);
+        Completable binder=strategy.bind(testMethod,testVal,testAnnotation, null);
         Throwable error = binder.blockingGet();
         assertNull(error);
 
@@ -85,7 +85,7 @@ public class CompitableStrategyTest {
         doReturn(false).when(preferenceConverter).isConvertible(any(),any());
         doReturn(testVal.getClass()).when(preferenceHelper).getPreferenceType(testAnnotation.key());
 
-        Completable binder=strategy.bind(testMethod,testVal,testAnnotation);
+        Completable binder=strategy.bind(testMethod,testVal,testAnnotation, null);
         Throwable error = binder.blockingGet();
         assertEquals(error.getClass(), NoSuchConverterException.class);
 

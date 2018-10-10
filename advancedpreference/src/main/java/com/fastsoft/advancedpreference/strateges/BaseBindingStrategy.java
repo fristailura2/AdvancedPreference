@@ -21,15 +21,18 @@ public abstract class BaseBindingStrategy<T> implements BindingStrategy<T>,Compa
     private PreferenceHelper preferenceHelper;
     private Set<PreferenceConverter> preferenceConverters;
 
-    protected abstract T bindPrivate(Method method, Object arg, PreferenceOperation methodPrefAnnotation) throws NoSuchConverterException;
+    protected abstract T bindPrivate(Method method, Object arg, PreferenceOperation methodPrefAnnotation, Object defVal) throws NoSuchConverterException;
 
     @Override
-    public T bind(Method method, Object arg, PreferenceOperation methodPrefAnnotation) throws NoSuchConverterException {
+    public T bind(Method method, Object arg, PreferenceOperation methodPrefAnnotation, Object defVal) throws NoSuchConverterException {
         Objects.throwIfNullParam(method,"method");
         Objects.throwIfNullParam(method,"methodPrefAnnotation");
 
-        return bindPrivate(method,arg,methodPrefAnnotation);
+
+        return bindPrivate(method,arg,methodPrefAnnotation,defVal);
     }
+
+
 
     public BaseBindingStrategy(PreferenceHelper preferenceHelper, Set<PreferenceConverter> preferenceConverters) {
         this.preferenceHelper = preferenceHelper;

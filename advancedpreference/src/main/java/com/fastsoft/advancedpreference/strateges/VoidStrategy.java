@@ -19,7 +19,7 @@ public class VoidStrategy extends BaseBindingStrategy<Void>{
     }
 
     @Override
-    public Void bindPrivate(Method method, Object arg, PreferenceOperation methodPrefAnnotation) throws NoSuchConverterException {
+    public Void bindPrivate(Method method, Object arg, PreferenceOperation methodPrefAnnotation, Object defVal) throws NoSuchConverterException {
         Objects.throwIfNullParam(arg,"arg");
 
         Class<?> fromClass = method.getParameterTypes()[0];

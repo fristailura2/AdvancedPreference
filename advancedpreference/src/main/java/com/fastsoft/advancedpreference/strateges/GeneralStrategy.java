@@ -1,8 +1,5 @@
 package com.fastsoft.advancedpreference.strateges;
 
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-
 import com.fastsoft.advancedpreference.PreferenceHelper;
 import com.fastsoft.advancedpreference.anotations.PreferenceOperation;
 import com.fastsoft.advancedpreference.converters.PreferenceConverter;
@@ -10,7 +7,6 @@ import com.fastsoft.advancedpreference.exceptions.NoSuchConverterException;
 import com.fastsoft.advancedpreference.utils.Objects;
 
 import java.lang.reflect.Method;
-import java.util.Observable;
 import java.util.Set;
 
 import io.reactivex.Completable;
@@ -25,12 +21,12 @@ public class GeneralStrategy extends BaseBindingStrategy{
     }
 
     @Override
-    public Object bindPrivate(Method method,Object arg,PreferenceOperation methodPrefAnnotation) throws NoSuchConverterException {
+    public Object bindPrivate(Method method, Object arg, PreferenceOperation methodPrefAnnotation, Object defVal) throws NoSuchConverterException {
         Objects.throwIfNotNullParam(arg,"arg");
 
         Object prefVal = getPreferenceHelper().get(methodPrefAnnotation.key());
         if(prefVal==null)
-            return null;
+            return defVal;
 
         Set<PreferenceConverter> binders = getPreferenceConverters();
 
