@@ -3,12 +3,16 @@ package com.fastsoft.advancedpreference.utils;
 import java.lang.reflect.Method;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
 
 /**
  * Created by ura on 20-Aug-18.
  */
 
 public class ReflectionUtils {
+    private static final List primitivesAndWrapped=Collections.unmodifiableList(Arrays.asList("Integer","Long","Short","Byte","Float","Double","Character","Void","Boolean","int","long","short","byte","float","double","char","void","boolean"));
     public static Class<?> getMethodGenericReturnClass(Method method, int genericIndex){
         return (Class)((ParameterizedType)method.getGenericReturnType()).getActualTypeArguments()[genericIndex];
     }
@@ -25,6 +29,9 @@ public class ReflectionUtils {
     public static Type getMethodGenericParam(Method method,int genericIndex){
         Type[] res = method.getGenericParameterTypes();
         return res[genericIndex];
+    }
+    public static boolean isPrimitiveOrWrappedPrimitive(Class primitiveWrapClass){
+        return primitivesAndWrapped.contains(primitiveWrapClass.getSimpleName());
     }
     public static Class findPrimitiveByWrap(Class primitiveWrapClass){
         Class res=primitiveWrapClass;

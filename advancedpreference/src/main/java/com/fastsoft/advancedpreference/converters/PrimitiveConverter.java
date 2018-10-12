@@ -21,6 +21,8 @@ public class PrimitiveConverter extends PreferenceConverter {
         return convert(from,classToConvert);
     }
     private Object convert(@NonNull Object from, @NonNull Class classToConvert){
+        if(ReflectionUtils.findWrapByPrimitive(from.getClass()).equals(ReflectionUtils.findWrapByPrimitive(classToConvert)))
+            return from;
         return numberConverter.convertFromFirstToClass((Number) from,
                 classToConvert.isPrimitive()?
                 ReflectionUtils.findWrapByPrimitive(classToConvert):classToConvert);
@@ -28,6 +30,9 @@ public class PrimitiveConverter extends PreferenceConverter {
 
     @Override
     public boolean isConvertible(@NonNull Class first, @NonNull Class second) {
+        if(!(ReflectionUtils.isPrimitiveOrWrappedPrimitive(first)&&
+                ReflectionUtils.isPrimitiveOrWrappedPrimitive(second)))
+            return false;
         Class wrappedFirst = ReflectionUtils.findWrapByPrimitive(first);
         Class wrappedSecond = ReflectionUtils.findWrapByPrimitive(second);
 

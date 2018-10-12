@@ -49,10 +49,10 @@ public class PreferenceConfig {
     private static Set<PreferenceConverter> provideDefaultBinders(){
         NumberConverter numberConverter=new NumberConverter();
         return new TreeSet<>(Arrays.asList(
+                new SameTypeConverter(),
                 new CollectionsConverter(),
                 numberConverter,
                 new StringNumberConverter(),
-                new SameTypeConverter(),
                 new PrimitiveConverter(numberConverter)
         ));
     }

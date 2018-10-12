@@ -139,6 +139,11 @@ public class SimpleCaseTest {
         assertEquals(0,val);
         testModel.setSomeInteger(1);
         assertEquals(testModel.getSomeInteger(0),1);
+
+        String defval=testModel.getSomeString("def");
+        assertEquals("def",defval);
+        testModel.setSomeString("new");
+        assertEquals("new",testModel.getSomeString(""));
     }
     public interface TestModel extends PreferenceModel{
         @PreferenceOperation(key = TEST_PREFIX+SOME_INT_KEY)
@@ -191,5 +196,9 @@ public class SimpleCaseTest {
         int getSomeInteger(@DefVal int baseval);
         @PreferenceOperation(key = TEST_PREFIX+"_any_int")
         void setSomeInteger(int val);
+        @PreferenceOperation(key = TEST_PREFIX+"_any_str")
+        String getSomeString(@DefVal String baseval);
+        @PreferenceOperation(key = TEST_PREFIX+"_any_str")
+        void setSomeString(String val);
     }
 }
