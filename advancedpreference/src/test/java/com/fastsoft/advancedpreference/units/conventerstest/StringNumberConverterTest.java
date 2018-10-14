@@ -39,18 +39,18 @@ public class StringNumberConverterTest {
     }
     @Test
     public void convertFromStringTest(){
-        assertEquals(stringNumberBinder.convertFromFirstToClass(TEST_VAL,Integer.class),SPECIMEN_VAL);
-        assertEquals(stringNumberBinder.convertFromFirstToClass(TEST_VAL,Float.class),Float.valueOf(SPECIMEN_VAL));
-        assertEquals(stringNumberBinder.convertFromFirstToClass(TEST_VAL,Double.class),Double.valueOf(SPECIMEN_VAL));
-        assertEquals(stringNumberBinder.convertFromFirstToClass(TEST_VAL,BigInteger.class),BigInteger.valueOf(SPECIMEN_VAL));
-        assertEquals(stringNumberBinder.convertFromFirstToClass(TEST_VAL,BigDecimal.class),BigDecimal.valueOf(SPECIMEN_VAL));
+        assertEquals(SPECIMEN_VAL,stringNumberBinder.convert(TEST_VAL,Integer.class));
+        assertEquals(Float.valueOf(SPECIMEN_VAL),stringNumberBinder.convert(TEST_VAL,Float.class));
+        assertEquals(Double.valueOf(SPECIMEN_VAL),stringNumberBinder.convert(TEST_VAL,Double.class));
+        assertEquals(BigInteger.valueOf(SPECIMEN_VAL),stringNumberBinder.convert(TEST_VAL,BigInteger.class));
+        assertEquals(BigDecimal.valueOf(SPECIMEN_VAL),stringNumberBinder.convert(TEST_VAL,BigDecimal.class));
     }
     @Test
     public void convertToStringTest(){
-        assertEquals(stringNumberBinder.convertFromSecondToClass(SPECIMEN_VAL,String.class),TEST_VAL);
-        assertEquals(stringNumberBinder.convertFromSecondToClass((float)SPECIMEN_VAL,String.class),TEST_VAL_WITH_ZERO);
-        assertEquals(stringNumberBinder.convertFromSecondToClass((double)SPECIMEN_VAL,String.class),TEST_VAL_WITH_ZERO);
-        assertEquals(stringNumberBinder.convertFromSecondToClass(BigInteger.valueOf(SPECIMEN_VAL),String.class),TEST_VAL);
-        assertEquals(stringNumberBinder.convertFromSecondToClass(BigDecimal.valueOf(SPECIMEN_VAL),String.class),TEST_VAL);
+        assertEquals(stringNumberBinder.convert(SPECIMEN_VAL,String.class),TEST_VAL);
+        assertEquals(stringNumberBinder.convert((float)SPECIMEN_VAL,String.class),TEST_VAL_WITH_ZERO);
+        assertEquals(stringNumberBinder.convert((double)SPECIMEN_VAL,String.class),TEST_VAL_WITH_ZERO);
+        assertEquals(stringNumberBinder.convert(BigInteger.valueOf(SPECIMEN_VAL),String.class),TEST_VAL);
+        assertEquals(stringNumberBinder.convert(BigDecimal.valueOf(SPECIMEN_VAL),String.class),TEST_VAL);
     }
 }

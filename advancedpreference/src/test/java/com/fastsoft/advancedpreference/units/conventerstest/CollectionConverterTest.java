@@ -10,6 +10,7 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
@@ -53,9 +54,9 @@ public class CollectionConverterTest {
     }
     @Test
     public void convertTest(){
-        assertEquals(list,new ArrayList<>(collectionsBinder.convertFromFirstTo(list,TreeSet.class)));
-        assertEquals(list,new ArrayList<>(collectionsBinder.convertFromFirstTo(list,LinkedList.class)));
-        assertEquals(list,new ArrayList<>(collectionsBinder.convertFromFirstTo(list,HashSet.class)));
-        assertEquals(list,new ArrayList<>(collectionsBinder.convertFromFirstTo(list,Vector.class)));
+        assertEquals(list,new ArrayList((Collection) collectionsBinder.convert(list,TreeSet.class)));
+        assertEquals(list,new ArrayList((Collection) collectionsBinder.convert(list,LinkedList.class)));
+        assertEquals(list,new ArrayList((Collection) collectionsBinder.convert(list,HashSet.class)));
+        assertEquals(list,new ArrayList((Collection) collectionsBinder.convert(list,Vector.class)));
     }
 }

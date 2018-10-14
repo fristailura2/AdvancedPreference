@@ -17,15 +17,15 @@ public class SameTypeConverterTest {
     SameTypeConverter sameTypeConverter =new SameTypeConverter();
     @Test(expected = IllegalArgumentException.class)
     public void illegalConvertTest(){
-        sameTypeConverter.convertFromFirstTo(new Integer(1),String.class);
+        sameTypeConverter.convert(new Integer(1),String.class);
     }
     @Test
     public void convertTest(){
-        sameTypeConverter.convertFromFirstTo(1,Integer.class);
-        sameTypeConverter.convertFromFirstTo(new TreeSet<>(),TreeSet.class);
-        sameTypeConverter.convertFromFirstTo("",String.class);
-        sameTypeConverter.convertFromFirstTo(1f,Float.class);
-        sameTypeConverter.convertFromFirstTo(34d,Double.class);
+        sameTypeConverter.convert(1,Integer.class);
+        sameTypeConverter.convert(new TreeSet<>(),TreeSet.class);
+        sameTypeConverter.convert("",String.class);
+        sameTypeConverter.convert(1f,Float.class);
+        sameTypeConverter.convert(34d,Double.class);
     }
     @Test
     public void canConvertTest(){

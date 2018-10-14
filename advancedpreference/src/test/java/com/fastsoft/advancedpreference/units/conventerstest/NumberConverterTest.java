@@ -36,10 +36,10 @@ public class NumberConverterTest {
     }
     @Test
     public void convertTest(){
-        assertTrue(1==namberBinder.convertFromFirstTo(1,Short.class).intValue());
-        assertTrue(2==namberBinder.convertFromFirstTo(2,Float.class).intValue());
-        assertTrue(3==namberBinder.convertFromFirstTo(3,Double.class).intValue());
-        assertTrue(4==namberBinder.convertFromFirstTo(4,BigInteger.class).intValue());
-        assertTrue(5==namberBinder.convertFromFirstTo(5,BigDecimal.class).intValue());
+        assertEquals(1,((short)namberBinder.convert(1,Short.class)),0);
+        assertEquals(2,((float)namberBinder.convert(2,Float.class)),0);
+        assertEquals(3,((double)namberBinder.convert(3,Double.class)),0);
+        assertEquals(4,((BigInteger)namberBinder.convert(4,BigInteger.class)).intValue());
+        assertEquals(5,((BigDecimal)namberBinder.convert(5,BigDecimal.class)).intValue());
     }
 }

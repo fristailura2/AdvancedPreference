@@ -9,8 +9,8 @@ public class EnumConverterTest {
     EnumConverter enumConverter=new EnumConverter();
     @Test
     public void simpleTest(){
-        assertEquals(TestEnum.test2.name(),enumConverter.convertFromFirstTo(TestEnum.test2,String.class));
-        assertEquals(TestEnum.test1,enumConverter.convertFromSecondTo(TestEnum.test1.name(),TestEnum.class));
+        assertEquals(TestEnum.test2.name(),enumConverter.convert(TestEnum.test2,String.class));
+        assertEquals(TestEnum.test1,enumConverter.convert(TestEnum.test1.name(),TestEnum.class));
     }
     @Test
     public void convertibleTest(){

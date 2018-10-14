@@ -6,8 +6,9 @@ import com.fastsoft.advancedpreference.AdvancedPreferences;
 import com.fastsoft.advancedpreference.PreferenceConfig;
 import com.fastsoft.advancedpreference.PreferenceHelper;
 import com.fastsoft.advancedpreference.anotations.PreferenceOperation;
-import com.fastsoft.advancedpreference.converters.PreferenceConverter;
+
 import com.fastsoft.advancedpreference.converters.SameTypeConverter;
+import com.fastsoft.advancedpreference.converters.newBaseConverter;
 import com.fastsoft.advancedpreference.exceptions.IllegalMethodException;
 import com.fastsoft.advancedpreference.models.PreferenceModel;
 import com.fastsoft.advancedpreference.strateges.GeneralStrategy;
@@ -44,7 +45,7 @@ public class AdvancedPreferencesTest {
     SharedPreferences sharedPreferencesMock;
     @Mock
     PreferenceHelper preferenceHelperMock;
-    Set<PreferenceConverter> converters= new TreeSet<>(Arrays.asList(new SameTypeConverter()));
+    Set<newBaseConverter> converters= new TreeSet<>(Arrays.asList(new SameTypeConverter()));
     MockitoSession sesion;
     @Before
     public void init(){

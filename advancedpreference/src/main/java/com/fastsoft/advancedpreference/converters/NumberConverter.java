@@ -1,5 +1,7 @@
 package com.fastsoft.advancedpreference.converters;
 
+
+
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -9,37 +11,34 @@ import java.util.concurrent.atomic.AtomicLong;
  * Created by ura on 20-Aug-18.
  */
 
-public class NumberConverter extends PreferenceConverter<Number,Number> {
+public class NumberConverter extends newBaseConverter {
 
-    @Override
-    public Number convertFromFirstToClass(Number from, Class<? extends Number> classToConvert) {
-        return convert(from, classToConvert);
-    }
-
-    @Override
-    public Number convertFromSecondToClass(Number from, Class<? extends Number> classToConvert) {
-        return convert(from,classToConvert);
-    }
 
     @Override
     public boolean isConvertible(Class<?> first, Class<?> second) {
         return Number.class.isAssignableFrom(first)&&Number.class.isAssignableFrom(second)&&(!first.equals(second));
     }
-    private Number convert(Number from, Class<? extends Number> classToConvert){
-        Number number=convertPrimitives(from,classToConvert);
+
+    @Override
+    Object convertPrivate(Object from1, Class<?> toClass) {
+        Number from= (Number) from1;
+        Number number=convertPrimitives(from,(Class<Number>) toClass);
         if(number==null){
-            if(classToConvert.equals(BigInteger.class)){
+            if(toClass.equals(BigInteger.class)){
                 number=BigInteger.valueOf(convertPrimitives(from,Long.class));
-            }else if(classToConvert.equals(BigDecimal.class)){
+            }else if(toClass.equals(BigDecimal.class)){
                 number=BigDecimal.valueOf(convertPrimitives(from,Long.class));
-            }else if(classToConvert.equals(AtomicInteger.class)){
+            }else if(toClass.equals(AtomicInteger.class)){
                 number=new AtomicInteger(convertPrimitives(from,Integer.class));
-            }else if(classToConvert.equals(AtomicLong.class)){
+            }else if(toClass.equals(AtomicLong.class)){
                 number=new AtomicLong(convertPrimitives(from,Long.class));
             }
         }
         return number;
     }
+
+
+
     private <T>T convertPrimitives(Number from, Class<T> classToConvert){
         Number number=null;
         if(Byte.class.equals(classToConvert)) {

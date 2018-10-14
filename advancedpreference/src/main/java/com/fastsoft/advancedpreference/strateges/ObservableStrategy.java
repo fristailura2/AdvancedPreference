@@ -1,9 +1,10 @@
 package com.fastsoft.advancedpreference.strateges;
 
 import com.fastsoft.advancedpreference.PreferenceHelper;
+import com.fastsoft.advancedpreference.converters.newBaseConverter;
 import com.fastsoft.advancedpreference.utils.ReflectionUtils;
 import com.fastsoft.advancedpreference.anotations.PreferenceOperation;
-import com.fastsoft.advancedpreference.converters.PreferenceConverter;
+
 import com.fastsoft.advancedpreference.exceptions.NoSuchConverterException;
 import com.fastsoft.advancedpreference.utils.Objects;
 
@@ -20,7 +21,7 @@ import io.reactivex.Observable;
 
 public class ObservableStrategy extends BaseBindingStrategy<Observable>{
 
-    public ObservableStrategy(PreferenceHelper preferenceHelper, Set<PreferenceConverter> preferenceConverters) {
+    public ObservableStrategy(PreferenceHelper preferenceHelper, Set<newBaseConverter> preferenceConverters) {
         super(preferenceHelper, preferenceConverters);
     }
 
@@ -58,9 +59,9 @@ public class ObservableStrategy extends BaseBindingStrategy<Observable>{
                         convertFromClass = convertedVal.getClass();
                     }
 
-                    for (PreferenceConverter preferenceBinder: getPreferenceConverters()) {
+                    for (newBaseConverter preferenceBinder: getPreferenceConverters()) {
                         if(preferenceBinder.isConvertible(convertFromClass,convertToClass)) {
-                            return preferenceBinder.convertFromSecondTo(convertedVal,convertFromClass);
+                            return preferenceBinder.convert(convertedVal,convertFromClass);
                         }
                     }
                     throw new NoSuchConverterException(String.format("no binder to convert from %s to %s", ReflectionUtils.getMethodGenericReturnClass(method,0).getSimpleName(),convertFromClass.getSimpleName()));

@@ -2,7 +2,8 @@ package com.fastsoft.advancedpreference.strateges;
 
 import com.fastsoft.advancedpreference.PreferenceHelper;
 import com.fastsoft.advancedpreference.anotations.PreferenceOperation;
-import com.fastsoft.advancedpreference.converters.PreferenceConverter;
+
+import com.fastsoft.advancedpreference.converters.newBaseConverter;
 import com.fastsoft.advancedpreference.exceptions.NoSuchConverterException;
 
 import java.lang.reflect.Method;
@@ -15,8 +16,8 @@ import java.util.Set;
 public interface BindingStrategy<T> {
     T bind(Method method, Object arg, PreferenceOperation methodPrefAnnotation, Object defVal) throws NoSuchConverterException;
     void setPreferenceHelper(PreferenceHelper preferenceHelper);
-    void setPreferenceConverters(Set<PreferenceConverter> preferenceConverters);
+    void setPreferenceConverters(Set<newBaseConverter> preferenceConverters);
     PreferenceHelper getPreferenceHelper();
-    Set<PreferenceConverter> getPreferenceConverters();
+    Set<newBaseConverter> getPreferenceConverters();
     boolean canWorkWith(Class<?> arg);
 }

@@ -2,7 +2,8 @@ package com.fastsoft.advancedpreference.units.strategiestests;
 
 import com.fastsoft.advancedpreference.PreferenceHelper;
 import com.fastsoft.advancedpreference.anotations.PreferenceOperation;
-import com.fastsoft.advancedpreference.converters.PreferenceConverter;
+
+import com.fastsoft.advancedpreference.converters.newBaseConverter;
 import com.fastsoft.advancedpreference.exceptions.NoSuchConverterException;
 import com.fastsoft.advancedpreference.models.PreferenceModel;
 import com.fastsoft.advancedpreference.strateges.GeneralStrategy;
@@ -37,12 +38,12 @@ public class GeneralStrategyTest {
     @Mock
     PreferenceHelper preferenceHelper;
     @Mock
-    PreferenceConverter preferenceConverter;
+    newBaseConverter preferenceConverter;
     @Mock
     TestablePreferenceModel testablePreferenceModel;
 
     GeneralStrategy strategy;
-    Set<PreferenceConverter> preferenceConverters=new TreeSet<>();
+    Set<newBaseConverter> preferenceConverters=new TreeSet<>();
     MockitoSession session;
 
     @Before
@@ -67,13 +68,13 @@ public class GeneralStrategyTest {
 
         doReturn(true).when(preferenceConverter).isConvertible(any(),any());
         doReturn(testVal).when(preferenceHelper).get(testAnnotation.key());
-        when(preferenceConverter.convertFromFirstTo(any(String.class),any())).then((mock)->mock.getArgument(0));
+        when(preferenceConverter.convert(any(String.class),any())).then((mock)->mock.getArgument(0));
         preferenceConverters.add(preferenceConverter);
 
         Assert.assertEquals(strategy.bind(testMethod,null,testAnnotation, null),testVal);
 
         verify(preferenceHelper).get(eq(testAnnotation.key()));
-        verify(preferenceConverter).convertFromFirstTo(any(String.class),any());
+        verify(preferenceConverter).convert(any(String.class),any());
     }
     @Test(expected = NoSuchConverterException.class)
     public void noRightConverterTest() throws NoSuchMethodException, NoSuchConverterException {

@@ -6,10 +6,10 @@ import android.support.annotation.NonNull;
 import com.fastsoft.advancedpreference.converters.CollectionsConverter;
 import com.fastsoft.advancedpreference.converters.EnumConverter;
 import com.fastsoft.advancedpreference.converters.NumberConverter;
-import com.fastsoft.advancedpreference.converters.PreferenceConverter;
 import com.fastsoft.advancedpreference.converters.PrimitiveConverter;
 import com.fastsoft.advancedpreference.converters.SameTypeConverter;
 import com.fastsoft.advancedpreference.converters.StringNumberConverter;
+import com.fastsoft.advancedpreference.converters.newBaseConverter;
 import com.fastsoft.advancedpreference.strateges.BindingStrategy;
 import com.fastsoft.advancedpreference.strateges.CompletableStrategy;
 import com.fastsoft.advancedpreference.strateges.GeneralStrategy;
@@ -27,7 +27,7 @@ import java.util.TreeSet;
  */
 
 public class PreferenceConfig {
-    private Set<PreferenceConverter> preferenceConverters;
+    private Set<newBaseConverter> preferenceConverters;
     private PreferenceHelper preferenceHelper;
     private Set<BindingStrategy> bindingStrategies =new TreeSet<>();
 
@@ -39,7 +39,7 @@ public class PreferenceConfig {
         builder.bindingStrategies= provideDefaultStrategies(builder.sharedPreferences,builder.preferenceConverters,builder.preferenceHelper);
         return builder.build();
     }
-    private static Set<BindingStrategy> provideDefaultStrategies(SharedPreferences sharedPreferences, Set<PreferenceConverter> preferenceConverters, PreferenceHelper preferenceHelper){
+    private static Set<BindingStrategy> provideDefaultStrategies(SharedPreferences sharedPreferences, Set<newBaseConverter> preferenceConverters, PreferenceHelper preferenceHelper){
         return new TreeSet<>(Arrays.asList(
                 new VoidStrategy(preferenceHelper, preferenceConverters),
                 new GeneralStrategy(preferenceHelper, preferenceConverters),
@@ -47,7 +47,7 @@ public class PreferenceConfig {
                 new ObservableStrategy(preferenceHelper, preferenceConverters)
         ));
     }
-    private static Set<PreferenceConverter> provideDefaultBinders(){
+    private static Set<newBaseConverter> provideDefaultBinders(){
         NumberConverter numberConverter=new NumberConverter();
         return new TreeSet<>(Arrays.asList(
                 new SameTypeConverter(),
@@ -59,7 +59,7 @@ public class PreferenceConfig {
         ));
     }
 
-    protected PreferenceConfig(Set<PreferenceConverter> preferenceConverters, SharedPreferences sharedPreferences, PreferenceHelper preferenceHelper, Set<BindingStrategy> bindingStrategies) {
+    protected PreferenceConfig(Set<newBaseConverter> preferenceConverters, SharedPreferences sharedPreferences, PreferenceHelper preferenceHelper, Set<BindingStrategy> bindingStrategies) {
         this.preferenceConverters = preferenceConverters;
         this.preferenceHelper = preferenceHelper;
         this.bindingStrategies=bindingStrategies;
@@ -74,11 +74,11 @@ public class PreferenceConfig {
         this.bindingStrategies = bindingStrategies;
     }
 
-    public Set<PreferenceConverter> getPreferenceConverters() {
+    public Set<newBaseConverter> getPreferenceConverters() {
         return preferenceConverters;
     }
 
-    public void setPreferenceConverters(Set<PreferenceConverter> preferenceConverters) {
+    public void setPreferenceConverters(Set<newBaseConverter> preferenceConverters) {
         this.preferenceConverters = preferenceConverters;
     }
 
@@ -88,18 +88,18 @@ public class PreferenceConfig {
     }
 
     public static class Builder{
-        private Set<PreferenceConverter> preferenceConverters =new TreeSet<>();
+        private Set<newBaseConverter> preferenceConverters =new TreeSet<>();
         private Set<BindingStrategy> bindingStrategies =new TreeSet<>();
         private SharedPreferences sharedPreferences;
         private PreferenceHelper preferenceHelper;
 
-        public Builder replaceConverters(@NonNull Collection<? extends PreferenceConverter> converters){
+        public Builder replaceConverters(@NonNull Collection<? extends newBaseConverter> converters){
             Objects.throwIfNullParam(converters,"converters");
 
             preferenceConverters.addAll(converters);
             return this;
         }
-        public Builder putConverter(@NonNull PreferenceConverter converter){
+        public Builder putConverter(@NonNull newBaseConverter converter){
             Objects.throwIfNullParam(converter,"converter");
 
             preferenceConverters.add(converter);
@@ -117,10 +117,10 @@ public class PreferenceConfig {
             this.sharedPreferences=sharedPreferences;
             return this;
         }
-        public Builder removeBinder(@NonNull Class<? extends PreferenceConverter> converterClass){
+        public Builder removeBinder(@NonNull Class<? extends newBaseConverter> converterClass){
             Objects.throwIfNullParam(converterClass,"converterClass");
 
-            for (PreferenceConverter preferenceConverter:preferenceConverters) {
+            for (newBaseConverter preferenceConverter:preferenceConverters) {
                 if(preferenceConverter.getClass().equals(converterClass)) {
                     preferenceConverters.remove(preferenceConverter);
                     break;

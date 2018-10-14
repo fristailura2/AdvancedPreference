@@ -2,7 +2,8 @@ package com.fastsoft.advancedpreference.units.strategiestests;
 
 import com.fastsoft.advancedpreference.PreferenceHelper;
 import com.fastsoft.advancedpreference.anotations.PreferenceOperation;
-import com.fastsoft.advancedpreference.converters.PreferenceConverter;
+
+import com.fastsoft.advancedpreference.converters.newBaseConverter;
 import com.fastsoft.advancedpreference.exceptions.NoSuchConverterException;
 import com.fastsoft.advancedpreference.models.PreferenceModel;
 import com.fastsoft.advancedpreference.strateges.CompletableStrategy;
@@ -37,12 +38,12 @@ public class CompitableStrategyTest {
     @Mock
     PreferenceHelper preferenceHelper;
     @Mock
-    PreferenceConverter preferenceConverter;
+    newBaseConverter preferenceConverter;
     @Mock
     TestablePreferenceModel testablePreferenceModel;
 
     CompletableStrategy strategy;
-    Set<PreferenceConverter> preferenceConverters=new TreeSet<>();
+    Set<newBaseConverter> preferenceConverters=new TreeSet<>();
     MockitoSession session;
     @Before
     public void init(){
@@ -65,14 +66,14 @@ public class CompitableStrategyTest {
 
         preferenceConverters.add(preferenceConverter);
         doReturn(true).when(preferenceConverter).isConvertible(any(),any());
-        doReturn(testVal).when(preferenceConverter).convertFromFirstTo(any(),any());
+        doReturn(testVal).when(preferenceConverter).convert(any(),any());
         doReturn(testVal.getClass()).when(preferenceHelper).getPreferenceType(testAnnotation.key());
 
         Completable binder=strategy.bind(testMethod,testVal,testAnnotation, null);
         Throwable error = binder.blockingGet();
         assertNull(error);
 
-        verify(preferenceConverter).convertFromFirstTo(testVal,String.class);
+        verify(preferenceConverter).convert(testVal,String.class);
         verify(preferenceHelper).put(testVal,testAnnotation.key());
     }
     @Test

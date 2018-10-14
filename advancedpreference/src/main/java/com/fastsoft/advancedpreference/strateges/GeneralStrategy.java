@@ -2,7 +2,8 @@ package com.fastsoft.advancedpreference.strateges;
 
 import com.fastsoft.advancedpreference.PreferenceHelper;
 import com.fastsoft.advancedpreference.anotations.PreferenceOperation;
-import com.fastsoft.advancedpreference.converters.PreferenceConverter;
+
+import com.fastsoft.advancedpreference.converters.newBaseConverter;
 import com.fastsoft.advancedpreference.exceptions.NoSuchConverterException;
 import com.fastsoft.advancedpreference.utils.Objects;
 
@@ -16,7 +17,7 @@ import io.reactivex.Completable;
  */
 
 public class GeneralStrategy extends BaseBindingStrategy{
-    public GeneralStrategy(PreferenceHelper preferenceHelper, Set<PreferenceConverter> set) {
+    public GeneralStrategy(PreferenceHelper preferenceHelper, Set<newBaseConverter> set) {
         super(preferenceHelper, set);
     }
 
@@ -28,7 +29,7 @@ public class GeneralStrategy extends BaseBindingStrategy{
         if(prefVal==null)
             return defVal;
 
-        Set<PreferenceConverter> binders = getPreferenceConverters();
+        Set<newBaseConverter> binders = getPreferenceConverters();
 
         Class<?> fromClass;
         Class<?> toClass=method.getReturnType();
@@ -43,9 +44,9 @@ public class GeneralStrategy extends BaseBindingStrategy{
             fromClass = prefVal.getClass();
         }
 
-        for (PreferenceConverter binder:binders) {
+        for (newBaseConverter binder:binders) {
             if(binder.isConvertible(fromClass,toClass)){
-                return binder.convertFromFirstTo(prefVal,toClass);
+                return binder.convert(prefVal,toClass);
             }
         }
         throw new NoSuchConverterException(String.format("no binder to convert from %s to %s",prefVal.getClass(),method.getReturnType()));

@@ -2,7 +2,8 @@ package com.fastsoft.advancedpreference.units.strategiestests;
 
 import com.fastsoft.advancedpreference.PreferenceHelper;
 import com.fastsoft.advancedpreference.anotations.PreferenceOperation;
-import com.fastsoft.advancedpreference.converters.PreferenceConverter;
+
+import com.fastsoft.advancedpreference.converters.newBaseConverter;
 import com.fastsoft.advancedpreference.exceptions.NoSuchConverterException;
 import com.fastsoft.advancedpreference.models.PreferenceModel;
 import com.fastsoft.advancedpreference.strateges.ObservableStrategy;
@@ -42,12 +43,12 @@ public class ObservableStrategyTest {
     @Mock
     PreferenceHelper preferenceHelper;
     @Mock
-    PreferenceConverter preferenceConverter;
+    newBaseConverter preferenceConverter;
     @Mock
     CompitableStrategyTest.TestablePreferenceModel testablePreferenceModel;
 
     ObservableStrategy strategy;
-    Set<PreferenceConverter> preferenceConverters=new TreeSet<>();
+    Set<newBaseConverter> preferenceConverters=new TreeSet<>();
     MockitoSession session;
 
     int counter;
@@ -74,7 +75,7 @@ public class ObservableStrategyTest {
 
         preferenceConverters.add(preferenceConverter);
         doReturn(true).when(preferenceConverter).isConvertible(any(),any());
-        when(preferenceConverter.convertFromSecondTo(any(String.class),any())).then((mock)->mock.getArgument(0));
+        when(preferenceConverter.convert(any(String.class),any())).then((mock)->mock.getArgument(0));
         //doReturn(String.class).when(preferenceHelper).getPreferenceType(testAnnotation.key());
         doAnswer((mock)->""+counter++).when(preferenceHelper).get(testAnnotation.key());
 
@@ -89,7 +90,7 @@ public class ObservableStrategyTest {
         Single binder2=binder.reduce(new String(""),(s, s2) -> s+s2);
         binder2.blockingGet();
 
-        verify(preferenceConverter,times(3)).convertFromSecondTo(any(String.class),eq(String.class));
+        verify(preferenceConverter,times(3)).convert(any(String.class),eq(String.class));
         verify(preferenceHelper,atLeast(3)).get(eq(testAnnotation.key()));
     }
 

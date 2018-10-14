@@ -3,9 +3,10 @@ package com.fastsoft.advancedpreference.strateges;
 import android.support.annotation.NonNull;
 
 import com.fastsoft.advancedpreference.PreferenceHelper;
+import com.fastsoft.advancedpreference.converters.newBaseConverter;
 import com.fastsoft.advancedpreference.utils.ReflectionUtils;
 import com.fastsoft.advancedpreference.anotations.PreferenceOperation;
-import com.fastsoft.advancedpreference.converters.PreferenceConverter;
+
 import com.fastsoft.advancedpreference.exceptions.NoSuchConverterException;
 import com.fastsoft.advancedpreference.utils.Objects;
 
@@ -19,7 +20,7 @@ import java.util.Set;
 
 public abstract class BaseBindingStrategy<T> implements BindingStrategy<T>,Comparable {
     private PreferenceHelper preferenceHelper;
-    private Set<PreferenceConverter> preferenceConverters;
+    private Set<newBaseConverter> preferenceConverters;
 
     protected abstract T bindPrivate(Method method, Object arg, PreferenceOperation methodPrefAnnotation, Object defVal) throws NoSuchConverterException;
 
@@ -34,7 +35,7 @@ public abstract class BaseBindingStrategy<T> implements BindingStrategy<T>,Compa
 
 
 
-    public BaseBindingStrategy(PreferenceHelper preferenceHelper, Set<PreferenceConverter> preferenceConverters) {
+    public BaseBindingStrategy(PreferenceHelper preferenceHelper, Set<newBaseConverter> preferenceConverters) {
         this.preferenceHelper = preferenceHelper;
         this.preferenceConverters = preferenceConverters;
     }
@@ -42,13 +43,13 @@ public abstract class BaseBindingStrategy<T> implements BindingStrategy<T>,Compa
     public void setPreferenceHelper(PreferenceHelper preferenceHelper){
         this.preferenceHelper = preferenceHelper;
     }
-    public void setPreferenceConverters(Set<PreferenceConverter> preferenceConverters){
+    public void setPreferenceConverters(Set<newBaseConverter> preferenceConverters){
         this.preferenceConverters = preferenceConverters;
     }
     public PreferenceHelper getPreferenceHelper(){
         return preferenceHelper;
     }
-    public Set<PreferenceConverter> getPreferenceConverters(){
+    public Set<newBaseConverter> getPreferenceConverters(){
         return preferenceConverters;
     }
 

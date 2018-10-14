@@ -4,7 +4,8 @@ import android.support.annotation.NonNull;
 
 import com.fastsoft.advancedpreference.PreferenceHelper;
 import com.fastsoft.advancedpreference.anotations.PreferenceOperation;
-import com.fastsoft.advancedpreference.converters.PreferenceConverter;
+
+import com.fastsoft.advancedpreference.converters.newBaseConverter;
 import com.fastsoft.advancedpreference.exceptions.NoSuchConverterException;
 import com.fastsoft.advancedpreference.utils.Objects;
 
@@ -20,7 +21,7 @@ import io.reactivex.Completable;
 public class CompletableStrategy extends BaseBindingStrategy<Completable>{
 
 
-    public CompletableStrategy(@NonNull PreferenceHelper preferenceHelper,@NonNull Set<PreferenceConverter> preferenceConverters) {
+    public CompletableStrategy(@NonNull PreferenceHelper preferenceHelper,@NonNull Set<newBaseConverter> preferenceConverters) {
         super(preferenceHelper, preferenceConverters);
     }
 
@@ -35,8 +36,8 @@ public class CompletableStrategy extends BaseBindingStrategy<Completable>{
             convertToClass = getPreferenceHelper().getPreferenceType(methodPrefAnnotation.key());
 
         Completable res=Completable.fromAction(()->{
-            PreferenceConverter rightConverter=null;
-            for (PreferenceConverter preferenceConverter:getPreferenceConverters()) {
+            newBaseConverter rightConverter=null;
+            for (newBaseConverter preferenceConverter:getPreferenceConverters()) {
                 if(preferenceConverter.isConvertible(arg.getClass(),convertToClass)){
                     rightConverter=preferenceConverter;
                     break;
@@ -44,7 +45,7 @@ public class CompletableStrategy extends BaseBindingStrategy<Completable>{
             }
             if(rightConverter==null)
                 throw new NoSuchConverterException(String.format("can not find converter to convert from %s to %s",arg.getClass().getSimpleName(),convertToClass.getSimpleName()));
-            getPreferenceHelper().put(rightConverter.convertFromFirstTo(arg,convertToClass),methodPrefAnnotation.key());
+            getPreferenceHelper().put(rightConverter.convert(arg,convertToClass),methodPrefAnnotation.key());
         });
         return res;
     }

@@ -2,30 +2,14 @@ package com.fastsoft.advancedpreference.converters;
 
 import android.support.annotation.NonNull;
 
+
 import com.fastsoft.advancedpreference.utils.ReflectionUtils;
 
-public class PrimitiveConverter extends PreferenceConverter {
+public class PrimitiveConverter extends newBaseConverter {
     private NumberConverter numberConverter;
 
     public PrimitiveConverter(NumberConverter numberConverter) {
         this.numberConverter = numberConverter;
-    }
-
-    @Override
-    protected Object convertFromFirstToClass(@NonNull Object from, @NonNull Class classToConvert) {
-        return convert(from,classToConvert);
-    }
-
-    @Override
-    protected Object convertFromSecondToClass(@NonNull Object from, @NonNull Class classToConvert) {
-        return convert(from,classToConvert);
-    }
-    private Object convert(@NonNull Object from, @NonNull Class classToConvert){
-        if(ReflectionUtils.findWrapByPrimitive(from.getClass()).equals(ReflectionUtils.findWrapByPrimitive(classToConvert)))
-            return from;
-        return numberConverter.convertFromFirstToClass((Number) from,
-                classToConvert.isPrimitive()?
-                ReflectionUtils.findWrapByPrimitive(classToConvert):classToConvert);
     }
 
     @Override
@@ -37,5 +21,14 @@ public class PrimitiveConverter extends PreferenceConverter {
         Class wrappedSecond = ReflectionUtils.findWrapByPrimitive(second);
 
         return  (numberConverter.isConvertible(wrappedFirst,wrappedSecond)||wrappedFirst.equals(wrappedSecond));
+    }
+
+    @Override
+    Object convertPrivate(Object from, Class<?> toClass) {
+        if(ReflectionUtils.findWrapByPrimitive(from.getClass()).equals(ReflectionUtils.findWrapByPrimitive(toClass)))
+            return from;
+        return numberConverter.convert(from,
+                toClass.isPrimitive()?
+                        ReflectionUtils.findWrapByPrimitive(toClass):(Class<Number>)toClass);
     }
 }

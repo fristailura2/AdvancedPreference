@@ -21,15 +21,15 @@ public class PrimitiveConverterTest {
     @Test
     public void legalConvert(){
         int testVal=1;
-        Object result = primitiveConverter.convertFromFirstTo(testVal, long.class);
+        Object result = primitiveConverter.convert(testVal, long.class);
         result.equals(testVal);
 
         byte testVal2=1;
-        result = primitiveConverter.convertFromFirstTo(testVal2, int.class);
+        result = primitiveConverter.convert(testVal2, int.class);
         result.equals(testVal2);
 
         double testVal3=1d;
-        result = primitiveConverter.convertFromFirstTo(testVal3, short.class);
+        result = primitiveConverter.convert(testVal3, short.class);
         result.equals(testVal3);
     }
     @Test

@@ -1,23 +1,20 @@
 package com.fastsoft.advancedpreference.converters;
 
+
+
 /**
  * Created by ura on 12-Aug-18.
  */
 
-public class SameTypeConverter extends PreferenceConverter<Object,Object> {
+public class SameTypeConverter extends newBaseConverter {
 
     @Override
-    public Object convertFromFirstToClass(Object from, Class classToConvert) {
-        return from;
-    }
-
-    @Override
-    public Object convertFromSecondToClass(Object from, Class classToConvert) {
-        return from;
-    }
-
-    @Override
-    public boolean isConvertible(Class first, Class second) {
+    public boolean isConvertible(Class<?> first, Class<?> second) {
         return first.equals(second);
+    }
+
+    @Override
+    Object convertPrivate(Object from, Class<?> toClass) {
+        return from;
     }
 }

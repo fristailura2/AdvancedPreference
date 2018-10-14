@@ -2,7 +2,8 @@ package com.fastsoft.advancedpreference.strateges;
 
 import com.fastsoft.advancedpreference.PreferenceHelper;
 import com.fastsoft.advancedpreference.anotations.PreferenceOperation;
-import com.fastsoft.advancedpreference.converters.PreferenceConverter;
+
+import com.fastsoft.advancedpreference.converters.newBaseConverter;
 import com.fastsoft.advancedpreference.exceptions.NoSuchConverterException;
 import com.fastsoft.advancedpreference.utils.Objects;
 
@@ -14,7 +15,7 @@ import java.util.Set;
  */
 
 public class VoidStrategy extends BaseBindingStrategy<Void>{
-    public VoidStrategy(PreferenceHelper preferenceHelper, Set<PreferenceConverter> preferenceConverters) {
+    public VoidStrategy(PreferenceHelper preferenceHelper, Set<newBaseConverter> preferenceConverters) {
         super(preferenceHelper, preferenceConverters);
     }
 
@@ -30,8 +31,8 @@ public class VoidStrategy extends BaseBindingStrategy<Void>{
         else
             convertToClass = getPreferenceHelper().getPreferenceType(methodPrefAnnotation.key());
 
-        PreferenceConverter rightConverter=null;
-        for (PreferenceConverter converter: getPreferenceConverters()) {
+        newBaseConverter rightConverter=null;
+        for (newBaseConverter converter: getPreferenceConverters()) {
             if(converter.isConvertible(fromClass,convertToClass)) {
                 rightConverter=converter;
                 break;
@@ -40,7 +41,7 @@ public class VoidStrategy extends BaseBindingStrategy<Void>{
         if (rightConverter == null)
             throw new NoSuchConverterException(String.format("no binder to convert from %s to %s",fromClass.getSimpleName(),convertToClass));
 
-        getPreferenceHelper().put(rightConverter.convertFromFirstTo(arg, convertToClass), methodPrefAnnotation.key());
+        getPreferenceHelper().put(rightConverter.convert(arg, convertToClass), methodPrefAnnotation.key());
         return null;
     }
 
