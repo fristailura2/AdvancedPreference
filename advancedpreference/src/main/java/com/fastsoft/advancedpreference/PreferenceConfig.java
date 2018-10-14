@@ -4,6 +4,7 @@ import android.content.SharedPreferences;
 import android.support.annotation.NonNull;
 
 import com.fastsoft.advancedpreference.converters.CollectionsConverter;
+import com.fastsoft.advancedpreference.converters.EnumConverter;
 import com.fastsoft.advancedpreference.converters.NumberConverter;
 import com.fastsoft.advancedpreference.converters.PreferenceConverter;
 import com.fastsoft.advancedpreference.converters.PrimitiveConverter;
@@ -50,6 +51,7 @@ public class PreferenceConfig {
         NumberConverter numberConverter=new NumberConverter();
         return new TreeSet<>(Arrays.asList(
                 new SameTypeConverter(),
+                new EnumConverter(),
                 new CollectionsConverter(),
                 numberConverter,
                 new StringNumberConverter(),
